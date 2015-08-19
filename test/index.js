@@ -4,6 +4,8 @@ var expect = require('chai').expect
 var dot = require('../index')
 var op = dot.Operators
 
+var ObjectID = require('mongodb').ObjectID
+
 describe('#primitive types scenarios', function () {
   it('when is an empty object returns empty', function () {
     var obj = {}
@@ -30,6 +32,11 @@ describe('#primitive types scenarios', function () {
     expect(dot.flatten(date)).to.equal(date)
   })
 
+  it('when is ObjectID returns the object', function () {
+    var id = new ObjectID()
+    expect(dot.flatten(id)).to.equal(id)
+  })
+  
   it('when is Array returns the Array', function () {
     var arr = [1, 2, 3]
     expect(dot.flatten(arr)).to.equal(arr)
@@ -252,7 +259,9 @@ describe('#complex scenarios', function () {
   })
 
   it('when has many inner properties with operators', function () {
-    var obj = {
+    var id = new ObjectID()
+	var obj = {
+	  id: id,
       a: {
         b: {
           c: op.$min(1), 
@@ -272,6 +281,7 @@ describe('#complex scenarios', function () {
     
     var expectedValue = {
       $set: {
+		'id': id,
         'a.b.d': 2,
         'n': { a: { b: { c: 'd' } } }
       },

@@ -47,7 +47,8 @@ function flatten(parent, prefix, child) {
 function isPrimitive(value) {
   return PrimitiveTypes.indexOf(typeof (value)) !== -1 || 
     util.isArray(value) ||
-    util.isDate(value)
+    util.isDate(value) ||
+	value.constructor.name === 'ObjectID'
 }
 
 function isOperator(value) {
