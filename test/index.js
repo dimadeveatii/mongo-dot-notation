@@ -12,7 +12,7 @@ describe('#primitive types scenarios', function () {
     expect(dot.flatten(obj)).to.deep.equal({})
   })
 
-  it('when is number returns the number', function () { 
+  it('when is number returns the number', function () {
     var n = 123
     expect(dot.flatten(n)).to.equal(n)
   })
@@ -36,7 +36,7 @@ describe('#primitive types scenarios', function () {
     var id = new ObjectID()
     expect(dot.flatten(id)).to.equal(id)
   })
-  
+
   it('when is Array returns the Array', function () {
     var arr = [1, 2, 3]
     expect(dot.flatten(arr)).to.equal(arr)
@@ -106,7 +106,7 @@ describe('#one-level scenarios with operators', function () {
     expect(dot.flatten(obj)).to.deep
       .equal({ $set: { x: 1 }, $setOnInsert: { y: 2 } })
   })
-  
+
   it('when more properties are $setOnInsert', function () {
     var obj = { x: 1, y: op.$setOnInsert([1, 2]), z: op.$setOnInsert(3) }
     expect(dot.flatten(obj)).to.deep
@@ -118,11 +118,11 @@ describe('#one-level scenarios with operators', function () {
     expect(dot.flatten(obj)).to.deep
       .equal({ $set: { x: 1, y: 2 } })
   })
-  
+
   it('when more properties are $set', function () {
     var obj = {
-      x: 1, 
-      y: op.$set([1, 2, 3]), 
+      x: 1,
+      y: op.$set([1, 2, 3]),
       z: op.$set({ inner: 'object', a: { b: 'c' } })
     }
 
@@ -135,7 +135,7 @@ describe('#one-level scenarios with operators', function () {
     expect(dot.flatten(obj)).to.deep
       .equal({ $set: { x: 1 }, $unset: { y: '' } })
   })
-  
+
   it('when more properties are $unset', function () {
     var obj = { x: 1, y: op.$unset(), z: op.$unset() }
     expect(dot.flatten(obj)).to.deep
@@ -147,7 +147,7 @@ describe('#one-level scenarios with operators', function () {
     expect(dot.flatten(obj)).to.deep
       .equal({ $set: { x: 1 }, $min: { y: 10 } })
   })
-  
+
   it('when more properties are $min', function () {
     var obj = { x: 1, y: op.$min(-1), z: op.$min('abc') }
     expect(dot.flatten(obj)).to.deep
@@ -159,7 +159,7 @@ describe('#one-level scenarios with operators', function () {
     expect(dot.flatten(obj)).to.deep
       .equal({ $set: { x: 1 }, $max: { y: 10 } })
   })
-  
+
   it('when more properties are $max', function () {
     var obj = { x: 1, y: op.$max(-1), z: op.$max('abc') }
     expect(dot.flatten(obj)).to.deep
@@ -171,7 +171,7 @@ describe('#one-level scenarios with operators', function () {
     expect(dot.flatten(obj)).to.deep
       .equal({ $set: { x: 1 }, $currentDate: { y: { $type: 'date' } } })
   })
-  
+
   it('when more properties are $max', function () {
     var obj = { x: 1, y: op.$currentDate(), z: op.$currentDate() }
     expect(dot.flatten(obj)).to.deep
@@ -183,11 +183,17 @@ describe('#one-level scenarios with operators', function () {
     expect(dot.flatten(obj)).to.deep
       .equal({ $set: { x: 1 }, $timestamp: { y: { $type: 'timestamp' } } })
   })
-  
+
   it('when more properties are $timestamp', function () {
     var obj = { x: 1, y: op.$timestamp(), z: op.$timestamp() }
     expect(dot.flatten(obj)).to.deep
       .equal({ $set: { x: 1 }, $timestamp: { y: { $type: 'timestamp' }, z: { $type: 'timestamp' } } })
+  })
+
+  it('when a property is null', function () {
+    var obj = { x: 1, y: null }
+    expect(dot.flatten(obj)).to.deep
+      .equal({ $set: { x: 1,  y: null } })
   })
 
   it('when uses all operators', function () {
@@ -204,7 +210,7 @@ describe('#one-level scenarios with operators', function () {
       j1: op.$currentDate(), j2: op.$currentDate(),
       k1: op.$timestamp(), k2: op.$timestamp()
     }
-    
+
     var expectedValue = {
       $set: { a1: 1, a2: 11, f1: new Date(2000, 1, 1), f2: new Date(2016, 1, 1) },
       $inc: { b1: 2, b2: 22 },
@@ -233,18 +239,18 @@ describe('#complex scenarios', function () {
     var obj = {
       a: {
         b: {
-          c: 1, 
-          d: 2, 
+          c: 1,
+          d: 2,
           x: {
             y: {
               z: [1]
             }
           }
         }
-      }, 
+      },
       x: 'test'
     }
-    
+
     var expectedValue = {
       $set: {
         'a.b.c': 1,
@@ -264,8 +270,8 @@ describe('#complex scenarios', function () {
 	  id: id,
       a: {
         b: {
-          c: op.$min(1), 
-          d: 2, 
+          c: op.$min(1),
+          d: 2,
           x: {
             y: {
               z: op.$inc(3),
@@ -274,11 +280,11 @@ describe('#complex scenarios', function () {
             t: op.$mul(5)
           }
         }
-      }, 
+      },
       n: op.$set({a: {b: {c: 'd'}}}),
       x: op.$rename('test')
     }
-    
+
     var expectedValue = {
       $set: {
 		'id': id,
@@ -290,7 +296,7 @@ describe('#complex scenarios', function () {
       $mul: { 'a.b.x.t': 5 },
       $rename: { 'x': 'test' }
     }
-    
+
     expect(dot.flatten(obj)).to.deep
       .equal(expectedValue)
   })

@@ -9,7 +9,7 @@ module.exports.Operators = require('./operators/update')
 
 module.exports.flatten = function (value) {
   if (!value || isPrimitive(value)) return value
-  
+
   var obj = {}
   flatten(obj, null, value)
   return obj
@@ -21,14 +21,14 @@ function flatten(parent, prefix, child) {
     parent.$set[prefix] = child
     return
   }
-  
+
   if (isOperator(child)) {
     var operator = operatorName(child)
     if (!parent[operator]) parent[operator] = {}
     parent[operator][prefix] = child.value()
     return
   }
-  
+
   var keys = Object.keys(child)
   if (!keys.length) {
     if (prefix) {
@@ -37,7 +37,7 @@ function flatten(parent, prefix, child) {
     }
     return
   }
-  
+
   keys.forEach(function (key) {
     var newPrefix = !prefix ? key : (prefix + '.' + key)
     flatten(parent, newPrefix, child[key])
@@ -45,9 +45,10 @@ function flatten(parent, prefix, child) {
 }
 
 function isPrimitive(value) {
-  return PrimitiveTypes.indexOf(typeof (value)) !== -1 || 
+  return PrimitiveTypes.indexOf(typeof (value)) !== -1 ||
     util.isArray(value) ||
     util.isDate(value) ||
+    value === null ||
 	value.constructor.name === 'ObjectID'
 }
 
