@@ -49,6 +49,7 @@ function isPrimitive(value) {
     util.isArray(value) ||
     util.isDate(value) ||
     value === null ||
+    value === undefined ||
 	value.constructor.name === 'ObjectID'
 }
 
