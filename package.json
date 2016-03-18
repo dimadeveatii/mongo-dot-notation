@@ -1,6 +1,6 @@
 {
   "name": "mongo-dot-notation",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Convert simple objects to mongo update operators",
   "author": {
     "name": "Dumitru Deveatii",
@@ -28,8 +28,8 @@
     "test": "mocha"
   },
   "devDependencies": {
-    "chai": "^3.4.1",
-    "mocha": "^2.3.4",
-    "mongodb": "^2.0.49"
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
+    "mongodb": "^2.1.7"
   }
 }
