@@ -10,7 +10,7 @@ describe('#primitive types scenarios', function () {
   it('when is an empty object returns empty', function () {
     var obj = {}
     expect(dot.flatten(obj)).to.deep.equal({})
-  })
+  });
 
   it('when is number returns the number', function () {
     var n = 123
@@ -64,7 +64,22 @@ describe('#one-level scenarios', function () {
   })
 })
 
+describe('graceful primitive handling', function() {
+
+  it('Handles null gracefully', function () {
+    var obj = { x: null }
+    expect(dot.flatten(obj)).to.deep.equal({ $set: { x: null } })
+  });
+
+  it('Handles undefined gracefully', function () {
+    var obj = { x: undefined }
+    expect(dot.flatten(obj)).to.deep.equal({ $set: { x: undefined } })
+  });
+
+})
+
 describe('#one-level scenarios with operators', function () {
+
   it('when a property is $inc', function () {
     var obj = { x: 1, y: op.$inc(2) }
     expect(dot.flatten(obj)).to.deep
