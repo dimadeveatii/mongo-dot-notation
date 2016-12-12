@@ -6,6 +6,7 @@
     "name": "Dumitru Deveatii",
     "email": "dimadeveatii@gmail.com"
   },
+  "main": "./index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/dimadeveatii/mongo-dot-notation.git"
