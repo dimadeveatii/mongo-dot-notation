@@ -50,7 +50,7 @@ function isPrimitive(value) {
     util.isDate(value) ||
     value === null ||
     value === undefined ||
-	value.constructor.name === 'ObjectID'
+	(value.constructor && value.constructor.name === 'ObjectID')
 }
 
 function isOperator(value) {
