@@ -2,62 +2,82 @@
 
 var util = require('util')
 
-var KnownOperators = ['$inc', '$mul', '$rename', '$setOnInsert', '$set', '$unset', '$min', '$max', '$currentDate', '$timestamp']
-var PrimitiveTypes = ['number', 'boolean', 'string']
+const PrimitiveTypes = [
+  'number',
+  'string',
+  'boolean',
+  'symbol'
+];
 
-module.exports.Operators = require('./operators/update')
+const BsonTypes = [
+  'Binary',
+  'Code',
+  'DBRef',
+  'Decimal128',
+  'Double',
+  'Int32',
+  'Long',
+  'MaxKey',
+  'MinKey',
+  'ObjectID',
+  'BSONRegExp',
+  'Symbol',
+  'Timestamp'
+]
+const operators = require('./operators/update')
+const isOperator = operators.isOperator;
 
-module.exports.flatten = function (value) {
-  if (!value || isPrimitive(value)) return value
+// for compatibility
+module.exports.Operators = operators
 
-  var obj = {}
-  flatten(obj, null, value)
-  return obj
+module.exports.flatten = value => flatten({}, null, value);
+
+function flatten(updateData, propertyName, propertyValue) {
+  if (isLeaf(propertyValue)) {
+    return propertyName ? 
+      build(updateData, '$set', propertyName, propertyValue) : propertyValue;
+  }
+
+  if (isOperator(propertyValue)) {
+    return build(updateData, propertyValue.operatorName, 
+                 propertyName, propertyValue.value());
+  }
+
+  var keys = Object.keys(propertyValue);
+  if (!keys.length) {
+    return propertyName ? 
+      build(updateData, '$set', propertyName, propertyValue) : updateData;
+  }
+
+  for(let i = 0; i < keys.length; i++){
+    const key = keys[i];
+    const newPrefix = !propertyName ? key : (propertyName + '.' + key)
+    flatten(updateData, newPrefix, propertyValue[key])
+  }
+  
+  return updateData
 }
 
-function flatten(parent, prefix, child) {
-  if (isPrimitive(child)) {
-    parent.$set = parent.$set || {}
-    parent.$set[prefix] = child
-    return
-  }
+function build(updateData, operator, propertyName, value) {
+    updateData[operator] = updateData[operator] || {};
+    updateData[operator][propertyName] = value;
 
-  if (isOperator(child)) {
-    var operator = operatorName(child)
-    if (!parent[operator]) parent[operator] = {}
-    parent[operator][prefix] = child.value()
-    return
-  }
+    return updateData
+}
 
-  var keys = Object.keys(child)
-  if (!keys.length) {
-    if (prefix) {
-      parent.$set = parent.$set || {}
-      parent.$set[prefix] = child
-    }
-    return
-  }
-
-  keys.forEach(function (key) {
-    var newPrefix = !prefix ? key : (prefix + '.' + key)
-    flatten(parent, newPrefix, child[key])
-  })
+function isLeaf(value) {
+	return value === null ||
+		   typeof(value) === 'undefined' ||
+		   isPrimitive(value) ||
+		   isBsonType(value);
 }
 
 function isPrimitive(value) {
-  return PrimitiveTypes.indexOf(typeof (value)) !== -1 ||
+  return PrimitiveTypes.indexOf(typeof (value)) > -1 ||
     util.isArray(value) ||
-    util.isDate(value) ||
-    value === null ||
-    value === undefined ||
-	(value.constructor && value.constructor.name === 'ObjectID')
+    util.isDate(value);
 }
 
-function isOperator(value) {
-  var operator = operatorName(value)
-  return KnownOperators.indexOf(operator) !== -1
-}
-
-function operatorName(operator) {
-  return operator.name || operator.constructor && operator.constructor.name
+function isBsonType(value) {
+	return value._bsontype && BsonTypes.indexOf(value._bsontype) > -1
 }
