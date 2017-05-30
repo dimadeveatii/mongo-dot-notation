@@ -1,88 +1,85 @@
 ﻿'use strict'
 
-var should = require('chai').should()
-var expect = require('chai').expect
-var dot = require('../index')
+var should = require('chai').should();
+var $ = require('../index');
 
-describe('#update opeators', function () {
+describe('# Update operators', function () {
   describe('$inc', function () {
-    it('defaults to 1', function () {
-      var $inc = dot.Operators.$inc()
-      $inc.value().should.equal(1)
-    })
-    
-    it('returns 1 when isNaN', function () {
-      var $inc = dot.Operators.$inc('abc')
-      $inc.value().should.equal(1)
+    it('When argument is undefined defaults to 1', function () {
+      $.$inc().value().should.equal(1)
     })
 
-    it('returns correct value', function () {
+    it('When argument is set uses its value', function () {
       var value = 123
-      var $inc = dot.Operators.$inc(value)
-      $inc.value().should.equal(value)
+      $.$inc(value).value().should.equal(value)
     })
   })
 
   describe('$mul', function () {
-    it('defaults to 1', function () {
-      var $mul = dot.Operators.$mul()
-      $mul.value().should.equal(1)
+    it('When argument is undefined defaults to 1', function () {
+      $.$mul().value().should.equal(1)
     })
 
-    it('returns 1 when isNaN', function () {
-      var $mul = dot.Operators.$mul('abc')
-      $mul.value().should.equal(1)
-    })
-
-    it('returns correct value', function () {
+    it('When argument is set uses its value', function () {
       var value = 10
-      var $mul = dot.Operators.$mul(value)
-      $mul.value().should.equal(value)
+      $.$mul(value).value().should.equal(value)
     })
   })
 
-  it('$rename returns correct value', function () {
-    var alias = 'test'
-    var $rename = dot.Operators.$rename(alias)
-    $rename.value().should.equal(alias)
+  describe('$rename', function(){
+	  it('Has expected value', function () {
+		var alias = 'test'
+		$.$rename(alias).value().should.equal(alias)
+	  })
   })
 
-  it('$setOnInsert returns correct value', function () {
-    var obj = {x: 10, y: 20}
-    var $setOnInsert = dot.Operators.$setOnInsert(obj)
-    $setOnInsert.value().should.equal(obj)
+  describe('$setOnInsert', function(){
+	it('Has expected value', function () {
+		var obj = {x: 10, y: 20}
+		$.$setOnInsert(obj).value().should.equal(obj)
+	  })  
   })
 
-  it('$set returns correct value', function () {
-    var obj = { x: 10, y: 20 }
-    var $set = dot.Operators.$set(obj)
-    $set.value().should.equal(obj)
+  describe('$set', function(){
+	it('Has expected value', function () {
+		var obj = { x: 10, y: 20 }
+		$.$set(obj).value().should.equal(obj)
+	  })
+  })
+  
+  describe('$unset', function(){
+	it('Has empty string value', function () {
+		$.$unset().value().should.equal('')
+	  })
   })
 
-  it('$unset returns empty value', function () {
-    var $unset = dot.Operators.$unset()
-    expect($unset.value()).to.equal('')
+  describe('$min', function(){
+	it('Has expected value', function () {
+		var value = 10
+		$.$min(value).value().should.equal(value)
+	})
   })
 
-  it('$min returns correct value', function () {
-    var value = 10
-    var $min = dot.Operators.$min(value)
-    $min.value().should.equal(value)
+  describe('$max', function(){
+	it('$max returns correct value', function () {
+		var value = 10
+		$.$max(value).value().should.equal(value)
+	  })
   })
+  
+  describe('$currentDate', function(){
+	it('When argument is undefined defaults to date type', function () {
+		$.$currentDate().value().should.be.deep.equal({ $type: 'date' })
+	  })
 
-  it('$max returns correct value', function () {
-    var value = 10
-    var $max = dot.Operators.$max(value)
-    $max.value().should.equal(value)
+	 it('When argument is set uses its value', function () {
+		$.$currentDate('timestamp').value().should.be.deep.equal({ $type: 'timestamp' })
+	  })
   })
-
-  it('$currentDate returns date type value', function () {
-    var $currentDate = dot.Operators.$currentDate()
-    expect($currentDate.value()).to.be.deep.equal({ $type: 'date' })
-  })
-
-  it('$timestamp returns timestamp type value', function () {
-    var $timestamp = dot.Operators.$timestamp()
-    expect($timestamp.value()).to.be.deep.equal({ $type: 'timestamp' })
+  
+  describe('$timestamp', function(){
+	it('Has timestamp type value', function () {
+		$.$timestamp().value().should.be.deep.equal({ $type: 'timestamp' })
+	  })  
   })
 })

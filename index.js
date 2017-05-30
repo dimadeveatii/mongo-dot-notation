@@ -27,8 +27,10 @@ const BsonTypes = [
 const operators = require('./operators/update')
 const isOperator = operators.isOperator;
 
-// for compatibility
+// Added for backwards compatibility in versions < 1.1
 module.exports.Operators = operators
+
+Object.keys(operators).forEach(x => module.exports[x] = operators[x])
 
 module.exports.flatten = value => flatten({}, null, value);
 
@@ -39,7 +41,7 @@ function flatten(updateData, propertyName, propertyValue) {
   }
 
   if (isOperator(propertyValue)) {
-    return build(updateData, propertyValue.operatorName, 
+    return build(updateData, propertyValue.name, 
                  propertyName, propertyValue.value());
   }
 
