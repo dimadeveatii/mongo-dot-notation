@@ -5,7 +5,7 @@ var dot = require('../index')
 var op = dot.Operators
 
 var ObjectID = require('mongodb').ObjectID
-
+	
 describe('#primitive types scenarios', function () {
   it('when is an empty object returns empty', function () {
     var obj = {}
@@ -61,6 +61,13 @@ describe('#one-level scenarios', function () {
 
     expect(dot.flatten(obj)).to.have.property('$set')
       .that.deep.equals(obj)
+  })
+  
+  it('when constructor is undefined sets object', function () {
+    var obj = { value: 'test' }
+	obj.constructor = undefined;
+    expect(dot.flatten(obj)).to.have.property('$set')
+	   .that.deep.equals(obj)
   })
 })
 
