@@ -2,6 +2,9 @@ mongo-dot-notation
 ========
 Convert simple objects to mongo update operators. <br/>
 
+[![NPM Version][https://img.shields.io/npm/v/mongo-dot-notation.svg]][https://npmjs.org/package/mongo-dot-notation]
+[![Build Status](https://travis-ci.org/dimadeveatii/mongo-dot-notation.svg?branch=master)](https://travis-ci.org/dimadeveatii/mongo-dot-notation)
+
 This lightweight library can be used to create a more readable code when working with mongo updates. 
 You focus on updated properties of the document, rather than on mongo update instructions.
 ##### Example:
@@ -225,4 +228,4 @@ var op = dot.Operators;
 // op.$timestamp() sets the value of a field to current date as a Timestamp
 ```
 
-> Copyright © 2015 Dumitru Deveatii, released under the MIT license
+> Copyright © 2017 Dumitru Deveatii, released under the MIT license
