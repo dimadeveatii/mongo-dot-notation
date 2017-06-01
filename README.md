@@ -2,7 +2,7 @@ mongo-dot-notation
 ========
 Convert simple objects to mongo update operators. <br/>
 
-[![NPM Version][https://img.shields.io/npm/v/mongo-dot-notation.svg]][https://npmjs.org/package/mongo-dot-notation]
+[![NPM Version](https://img.shields.io/npm/v/mongo-dot-notation.svg)](https://npmjs.org/package/mongo-dot-notation)
 [![Build Status](https://travis-ci.org/dimadeveatii/mongo-dot-notation.svg?branch=master)](https://travis-ci.org/dimadeveatii/mongo-dot-notation)
 
 This lightweight library can be used to create a more readable code when working with mongo updates. 
