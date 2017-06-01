@@ -203,13 +203,13 @@ describe('#one-level scenarios with operators', function () {
   it('when a property is $timestamp', function () {
     var obj = { x: 1, y: op.$timestamp() }
     expect(dot.flatten(obj)).to.deep
-      .equal({ $set: { x: 1 }, $timestamp: { y: { $type: 'timestamp' } } })
+      .equal({ $set: { x: 1 }, $currentDate: { y: { $type: 'timestamp' } } })
   })
 
   it('when more properties are $timestamp', function () {
     var obj = { x: 1, y: op.$timestamp(), z: op.$timestamp() }
     expect(dot.flatten(obj)).to.deep
-      .equal({ $set: { x: 1 }, $timestamp: { y: { $type: 'timestamp' }, z: { $type: 'timestamp' } } })
+      .equal({ $set: { x: 1 }, $currentDate: { y: { $type: 'timestamp' }, z: { $type: 'timestamp' } } })
   })
 
   it('when a property is null', function () {
@@ -242,8 +242,7 @@ describe('#one-level scenarios with operators', function () {
       $unset: { g1: '', g2: '' },
       $min: { h1: 8, h2: 88 },
       $max: { i1: 9, i2: 99 },
-      $currentDate: { j1: { $type: 'date' }, j2: { $type: 'date' } },
-      $timestamp: { k1: { $type: 'timestamp' }, k2: { $type: 'timestamp' } },
+      $currentDate: { j1: { $type: 'date' }, j2: { $type: 'date' }, k1: { $type: 'timestamp' }, k2: { $type: 'timestamp' } },
     }
     expect(dot.flatten(obj)).to.deep
       .equal(expectedValue)

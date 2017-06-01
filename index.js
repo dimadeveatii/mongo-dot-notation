@@ -59,5 +59,5 @@ function isOperator(value) {
 }
 
 function operatorName(operator) {
-  return operator.constructor && operator.constructor.name
+  return operator.name || operator.constructor && operator.constructor.name
 }
