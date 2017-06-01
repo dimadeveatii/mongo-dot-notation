@@ -17,7 +17,7 @@ module.exports.flatten = function (value) {
 
 function flatten(parent, prefix, child) {
   if (isPrimitive(child)) {
-    if (!parent.$set) parent.$set = {}
+    parent.$set = parent.$set || {}
     parent.$set[prefix] = child
     return
   }
@@ -32,7 +32,7 @@ function flatten(parent, prefix, child) {
   var keys = Object.keys(child)
   if (!keys.length) {
     if (prefix) {
-      if (!parent.$set) parent.$set = {}
+      parent.$set = parent.$set || {}
       parent.$set[prefix] = child
     }
     return

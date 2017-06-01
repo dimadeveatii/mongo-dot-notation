@@ -7,4 +7,6 @@ node_js:
 cache:
   directories:
     - "node_modules"
+script: "npm run-script test-ci"
+after_script: "npm install coveralls@2.13.1 && cat ./coverage/lcov.info | coveralls"
     

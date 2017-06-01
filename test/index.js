@@ -257,6 +257,13 @@ describe('#complex scenarios', function () {
       .equal({$set: {'a.b.c': 1}})
   })
 
+  it('when has inner property that is empty object', function () {
+    var obj = { a: {} }
+    expect(dot.flatten(obj)).to.deep
+      .equal({$set: {'a': {}}})
+  })
+
+  
   it('when has many inner properties', function () {
     var obj = {
       a: {
