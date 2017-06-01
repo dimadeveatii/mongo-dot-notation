@@ -9,7 +9,7 @@ var dot = require('../index')
 var flatten = dot.flatten
 var $ = dot.Operators
 
-describe.skip('#integration tests', function() {
+describe('#integration tests', function() {
   describe('simple cases', function() {
       var db;
       var collection;

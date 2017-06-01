@@ -7,8 +7,14 @@ node_js:
 cache:
   directories:
     - "node_modules"
-services:
-  - mongodb
+addons:
+  apt:
+    sources:
+      - mongodb-upstart
+      - mongodb-3.0-precise
+    packages:
+      - mongodb-org-server
+      - mongodb-org-shell
 script: "npm run-script test-ci"
 after_script: "npm install coveralls@2.13.1 && cat ./coverage/lcov.info | coveralls"
     
