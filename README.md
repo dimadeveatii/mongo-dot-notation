@@ -56,7 +56,7 @@ MongoClient.connect(url, function(err, db) {
       logins: $.$inc()
     }
   }
-  updateUser(db, flatten(update), function(err, res){
+  updateUser(db, $.flatten(update), function(err, res){
     db.close(); 
   })
 });
