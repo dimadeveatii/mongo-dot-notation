@@ -10,9 +10,7 @@ This lightweight library can be used to create a more readable code when working
 You focus on updated properties of the document, rather than on mongo update instructions.
 ##### Example:
 ```javascript
-var dot = require('mongo-dot-notation');
-var flatten = dot.flatten;
-var op = dot.Operators;
+var $ = require('mongo-dot-notation');
 
 var MongoClient = require('mongodb').MongoClient;
  
@@ -47,15 +45,15 @@ MongoClient.connect(url, function(err, db) {
     comment: 'Logged in.',
     system: 'demo',
     login: {
-      date: op.$currentDate()
+      date: $.$currentDate()
     },
     analytics: {
-      visits: op.$inc()
+      visits: $.$inc()
     },
     account: {
-      blocked: op.$unset(),
+      blocked: $.$unset(),
       attempts: 0,
-      logins: op.$inc()
+      logins: $.$inc()
     }
   }
   updateUser(db, flatten(update), function(err, res){
@@ -93,14 +91,14 @@ Install from npm:
 ### Convert a simple object
 
 ```javascript
-var dot = require('mongo-dot-notation');
+var $ = require('mongo-dot-notation');
 
 var person = {
   firstName: 'John',
   lastName: 'Doe'
 };
 
-var instructions = dot.flatten(person)
+var instructions = $.flatten(person)
 console.log(instructions);
 /* 
 {
@@ -115,7 +113,7 @@ console.log(instructions);
 ### Convert an object with deep properties
 
 ```javascript
-var dot = require('mongo-dot-notation');
+var $ = require('mongo-dot-notation');
 
 var person = {
   firstName: 'John',
@@ -127,7 +125,7 @@ var person = {
   }
 };
 
-var instructions = dot.flatten(person)
+var instructions = $.flatten(person)
 console.log(instructions);
 /* 
 {
@@ -144,17 +142,15 @@ console.log(instructions);
 
 ### Using operators
 ```javascript
-var dot = require('mongo-dot-notation');
-var $inc = dot.Operators.$inc;
-var $currentDate = dot.Operators.$currentDate;
+var $ = require('mongo-dot-notation');
 
 var person = {
   password: '1234',
-  updated: $currentDate(),
-  resetCounter: $inc()
+  updated: $.$currentDate(),
+  resetCounter: $.$inc()
 };
 
-var instructions = dot.flatten(person)
+var instructions = $.flatten(person)
 console.log(instructions);
 /* 
 {
@@ -173,20 +169,19 @@ console.log(instructions);
 
 Operators can also be used in inner objects:
 ```javascript
-var dot = require('mongo-dot-notation');
-var op = dot.Operators;
+var $ = require('mongo-dot-notation');
 
 var pos = {
   coords: {
-    x: op.$mul(2),
-    y: op.$inc(10),
-    z: op.$unset(),
+    x: $.$mul(2),
+    y: $.$inc(10),
+    z: $.$unset(),
     mark: [1, 2, 3]
   },
-  label: op.$rename('title')
+  label: $.$rename('title')
 };
 
-var instructions = dot.flatten(pos)
+var instructions = $.flatten(pos)
 console.log(instructions);
 /* 
 {
@@ -212,21 +207,24 @@ console.log(instructions);
 Operators cannot be used inside arrays.
 
 ## Update operators signatures
-```javascript
-var dot = require('mongo-dot-notation');
-var op = dot.Operators;
 
-// op.$inc(value) increment value, defaults to 1
-// op.$mul(value) multiply factor, defaults to 1
-// op.$rename(name) renames a field with a given name
-// op.$setOnInsert(value) sets the value only when inserted
-// op.$set(value) sets the value. This is an implicit operator, meaning:
+See [MongoDB - Fields update operators](https://docs.mongodb.com/manual/reference/operator/update/#fields).
+
+```javascript
+var $ = require('mongo-dot-notation');
+
+// $.$inc(value) increment value, defaults to 1
+// $.$mul(value) multiply factor, defaults to 1
+// $.$rename(name) renames a field with a given name
+// $.$setOnInsert(value) sets the value only when inserted
+// $.$set(value) sets the value. This is an implicit operator, meaning:
 //    {a: 1} and {a: $set(1)} are equivalent  
-// op.$unset() removes the field
-// op.$min(value) only updates the field if the specified value is less than the existing field value
-// op.$max(value) only updates the field if the specified value is greater than the existing field value
-// op.$currentDate() sets the value of a field to current date as a Date
-// op.$timestamp() sets the value of a field to current date as a Timestamp
+// $.$unset() removes the field
+// $.$min(value) only updates the field if the specified value is less than the existing field value
+// $.$max(value) only updates the field if the specified value is greater than the existing field value
+// $.$currentDate() sets the value of a field to current date as a Date
+// $.$currentDate(type) where type=<date|timestamp> sets the value of a field to current date or timestamp
+// $.$timestamp() sets the value of a field to current date as a Timestamp
 ```
 
-> Copyright © 2017 Dumitru Deveatii, released under the MIT license
+> Copyright © 2015-2017 Dumitru Deveatii, released under the MIT license
