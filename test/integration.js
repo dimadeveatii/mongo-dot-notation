@@ -147,7 +147,7 @@ describe('# Integration tests', function() {
     it('setOnInsert when inserted results in no changes', function () {
       var criteria = {email: 'test@test.com'};
       return collection.update(criteria, $.flatten({ pass: $.$setOnInsert('change-me-next-time') }), {upsert: true})
-        .then(() => collection.findOne(criteria))
+        .then(function(){ return collection.findOne(criteria); })
         .then(function(x){ return expect(x).to.have.property('pass').that.equals('change-me-next-time'); })
     })
   })
