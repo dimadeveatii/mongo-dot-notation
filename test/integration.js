@@ -8,7 +8,7 @@ var expect = require('chai').expect;
 var $ = require('../index');
 
 describe('# Integration tests', function() {
-  describe('Fields operators', function() {
+  describe('# Fields operators', function() {
     var db;
     var collection;
     var searchCriteria = { email: 'john.doe@test.com' };

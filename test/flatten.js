@@ -75,7 +75,7 @@ describe('# Flatten tests', function(){
     });
   });
 
-  describe('Empty values', function() {
+  describe('# Empty values', function() {
 
     it('When property value is null sets to null', function () {
       var obj = { x: null };
