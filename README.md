@@ -148,7 +148,9 @@ See below the list of all supported mongo update opertors.
 
 ### Field update operators
 
-#### [`$inc`](https://docs.mongodb.com/manual/reference/operator/update/inc/)
+#### `.$inc` 
+See mongo [**$inc**](https://docs.mongodb.com/manual/reference/operator/update/inc/).  
+
 The `$inc` operator increments a field by a specified value.
 ```javascript
 var $ = require('mongo-dot-notation')
@@ -167,7 +169,9 @@ $.flatten({
 // { '$inc': { 'visits': 5 } }
 ```
 
-#### [`$mul`](https://docs.mongodb.com/manual/reference/operator/update/mul/)
+#### `.$mul`
+See mongo [**$mul**](https://docs.mongodb.com/manual/reference/operator/update/mul/).  
+
 Multiplies the value of a field by a number. (*Supported in mongo >= 2.6*)
 ```javascript
 var $ = require('mongo-dot-notation')
@@ -177,8 +181,10 @@ $.flatten({
 // { '$mul': { 'price': 0.75 } }
 ```
 
-#### [`$rename`](https://docs.mongodb.com/manual/reference/operator/update/rename/)
-The $rename operator updates the name of a field.
+#### `.$rename` 
+See mongo [**$rename**](https://docs.mongodb.com/manual/reference/operator/update/rename/).  
+
+The `$rename` operator updates the name of a field.
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
@@ -187,7 +193,9 @@ $.flatten({
 // { '$rename': { 'nmae': 'name' } }
 ```
 
-#### [`$setOnInsert`](https://docs.mongodb.com/manual/reference/operator/update/setOnInsert/)
+#### `.$setOnInsert`
+See mongo [**$setOnInsert**](https://docs.mongodb.com/manual/reference/operator/update/setOnInsert/).  
+
 Assigns value to field only when the document is inserted (when an update operation is with `upsert:true`). (*Supported in mongo >= 2.4*)
 ```javascript
 var $ = require('mongo-dot-notation')
@@ -197,8 +205,10 @@ $.flatten({
 // { '$setOnInsert': { 'createdOn': new Date() } }
 ```
 
-#### [`$set`](https://docs.mongodb.com/manual/reference/operator/update/set/)
-The $set operator replaces the value of a field with the specified value.
+#### `.$set` 
+See mongo [**$set**](https://docs.mongodb.com/manual/reference/operator/update/set/).  
+
+The `$set` operator replaces the value of a field with the specified value.
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
@@ -207,7 +217,7 @@ $.flatten({
 // { '$set': { 'name': 'Mike' } }
 ```
 
-The $set is an implicit operator, meaning if an object is passed to `$.flatten`, it will navigate through own and embedded document fields and apply $set.
+The `$set` is an implicit operator, meaning if an object is passed to `$.flatten`, it will navigate through own and embedded document fields and apply $set.
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
@@ -225,7 +235,7 @@ $.flatten({
 // }
 ```
 
-The $set operator could also be used to reset an embedded field to a new document:
+The `$set` operator could also be used to reset an embedded field to a new document:
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
@@ -243,8 +253,10 @@ $.flatten({
 // }
 ```
 
-#### [`$unset`](https://docs.mongodb.com/manual/reference/operator/update/unset/)
-The $unset operator deletes a particular field.
+#### `.$unset` 
+See mongo [**$unset**](https://docs.mongodb.com/manual/reference/operator/update/unset/).  
+
+The `$unset` operator deletes a particular field.
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
@@ -254,8 +266,10 @@ $.flatten({
 // { '$unset': { 'comments': '', 'history': '' } }
 ```
 
-#### [`$min`](https://docs.mongodb.com/manual/reference/operator/update/min/)
-The $min updates the value of the field to a specified value if the specified value is less than the current value of the field.
+#### `.$min` 
+See mongo [**$min**](https://docs.mongodb.com/manual/reference/operator/update/min/).  
+
+The `$min` updates the value of the field to a specified value if the specified value is less than the current value of the field.
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
@@ -264,8 +278,10 @@ $.flatten({
 // { '$min': { 'low': 200 } }
 ```
 
-#### [`$max`](https://docs.mongodb.com/manual/reference/operator/update/max/)
-The $max operator updates the value of the field to a specified value if the specified value is greater than the current value of the field.
+#### `.$max` 
+See mongo [$max](https://docs.mongodb.com/manual/reference/operator/update/max/).  
+
+The `$max` operator updates the value of the field to a specified value if the specified value is greater than the current value of the field.
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
@@ -274,8 +290,10 @@ $.flatten({
 // { '$max': { 'high': 450 } }
 ```
 
-#### [`$currentDate`](https://docs.mongodb.com/manual/reference/operator/update/currentDate/)
-The $currentDate operator sets the value of a field to the current date, either as a *Date* or a *timestamp*.
+#### `.$currentDate` 
+See mongo [**$currentDate**](https://docs.mongodb.com/manual/reference/operator/update/currentDate/).  
+
+The `$currentDate` operator sets the value of a field to the current date, either as a *Date* or a *timestamp*.
 If type is not specified, uses *Date* by default.
 ```javascript
 var $ = require('mongo-dot-notation')
@@ -304,8 +322,10 @@ $.flatten({
 ```
 
 ### Array update operators
-#### [`$ (update)`](https://docs.mongodb.com/manual/reference/operator/update/positional/)
-The positional $ operator identifies an element in an array to update without explicitly specifying the position of the element in the array.
+#### `.$ (update)`
+See mongo [**$ (update)**](https://docs.mongodb.com/manual/reference/operator/update/positional/).  
+
+The positional `$` operator identifies an element in an array to update without explicitly specifying the position of the element in the array.
 ```javascript
 var $ = require('mongo-dot-notation')
 db.students.update(
@@ -331,7 +351,7 @@ db.students.update(
 // { $set: { "grades.$.std" : 1.5 } }
 ```
 
-The `$` positional operator is chainable with all mongo supported update fields.
+The positional `$` operator is chainable with all mongo supported update fields.
 ```javascript
 var $ = require('mongo-dot-notation')
 db.students.update(
@@ -361,8 +381,10 @@ $.flatten({
 // { $set: { "months.5.avgTemp" : 25.7 } }
 ```
 
-#### [`$addToSet`](https://docs.mongodb.com/manual/reference/operator/update/addToSet)
-The $addToSet operator adds a value to an array unless the value is already present, in which case $addToSet does nothing to that array.
+#### `.$addToSet`
+See mongo [**$addToSet**](https://docs.mongodb.com/manual/reference/operator/update/addToSet).  
+
+The `$addToSet` operator adds a value to an array unless the value is already present, in which case $addToSet does nothing to that array.
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
@@ -380,8 +402,10 @@ $.flatten({
 // { '$addToSet': { 'values': { '$each': [7, 1, 4] } } }
 ```
 
-#### [`$pop`](https://docs.mongodb.com/manual/reference/operator/update/pop)
-The $pop operator removes the first or last element of an array. Pass $pop a value of -1 to remove the first element of an array and 1 to remove the last element in an array.
+#### `.$pop`
+See mongo [**$pop**](https://docs.mongodb.com/manual/reference/operator/update/pop).  
+
+The `$pop` operator removes the first or last element of an array. Pass $pop a value of -1 to remove the first element of an array and 1 to remove the last element in an array.
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
@@ -409,8 +433,10 @@ $.flatten({
 // { '$pop': { 'indexes': -1, scores: 1 } }
 ```
 
-#### [`$pullAll`](https://docs.mongodb.com/manual/reference/operator/update/pullAll/)
-The $pullAll operator removes all instances of the specified values from an existing array.
+#### `.$pullAll` 
+See mongo [**$pullAll**](https://docs.mongodb.com/manual/reference/operator/update/pullAll/).  
+
+The `$pullAll` operator removes all instances of the specified values from an existing array.
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
@@ -419,8 +445,10 @@ $.flatten({
 // { '$pullAll': { 'values': [0, 1] } }
 ```
 
-#### [`$pull`](https://docs.mongodb.com/manual/reference/operator/update/pull/)
-The $pull operator removes from an existing array all instances of a value or values that match a specified condition.
+#### `.$pull`
+See mongo [**$pull**](https://docs.mongodb.com/manual/reference/operator/update/pull/).  
+
+The `$pull` operator removes from an existing array all instances of a value or values that match a specified condition.
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
@@ -440,8 +468,9 @@ $.flatten({
 
 See mongo documentation for [conditions](https://docs.mongodb.com/manual/reference/operator/update/pull/#remove-all-items-that-match-a-specified-pull-condition).
 
-#### [`$pushAll`](https://docs.mongodb.com/manual/reference/operator/update/pushAll/)
-The $pushAll operator appends the specified values to an array. (*Note that this operator is deprecated since mongo 2.4.*)
+#### `.$pushAll`
+See mongo [**$pushAll**](https://docs.mongodb.com/manual/reference/operator/update/pushAll/).
+The `$pushAll` operator appends the specified values to an array. (*Note that this operator is deprecated since mongo 2.4.*)
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
@@ -450,8 +479,10 @@ $.flatten({
 // { '$pushAll': { 'values': [1, 2, 3] } }
 ```
 
-#### [`$push`](https://docs.mongodb.com/manual/reference/operator/update/push/)
-The $push operator appends a specified value to an array. Can also be used to slice and sort the array.
+#### `$push` 
+See mongo [**$push**](https://docs.mongodb.com/manual/reference/operator/update/push/).  
+
+The `$push` operator appends a specified value to an array. Can also be used to slice and sort the array.
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
@@ -555,8 +586,10 @@ $.flatten({
 ```
 
 ### Bitwise update operators
-#### [`$bit`](https://docs.mongodb.com/manual/reference/operator/update/bit/)
-The $bit operator performs a bitwise update of a field. The operator supports bitwise and, bitwise or, and bitwise xor (i.e. exclusive or) operations.  
+#### `$bit` 
+See mongo [**$bit**](https://docs.mongodb.com/manual/reference/operator/update/bit/).  
+
+The `$bit` operator performs a bitwise update of a field. The operator supports bitwise AND, bitwise OR, and bitwise XOR (i.e. exclusive or) operations.  
 *Note XOR is supported in mongo >= 2.6*
 
 ```javascript
