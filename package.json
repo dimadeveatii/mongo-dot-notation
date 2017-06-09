@@ -1,7 +1,7 @@
 {
   "name": "mongo-dot-notation",
   "version": "1.2.0",
-  "description": "Convert simple objects to mongo update operators",
+  "description": "Transform objects to mongo update instructions",
   "author": {
     "name": "Dumitru Deveatii",
     "email": "dimadeveatii@gmail.com"
@@ -14,14 +14,18 @@
   "bugs": "https://github.com/dimadeveatii/mongo-dot-notation/issues",
   "keywords": [
     "mongo",
+    "dot",
     "dot-notation",
-    "conversion",
+    "transform",
+    "convert",
     "operators",
+    "instructions",
     "json",
     "objects",
     "parsing",
     "data",
-    "flatten"
+    "flatten",
+    "update"
   ],
   "license": "MIT",
   "readmeFilename": "README.md",
