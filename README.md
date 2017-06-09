@@ -43,7 +43,7 @@ var instructions = {
     * Array update operators
     * Bitwise update operators
   * Compatible with node >= 0.12
-  * No dependencies on mongo
+  * No *npm* dependencies on mongo
 
 ## Usage
 Using `$.flatten` and operators to transform to mongo update instructions.
@@ -79,7 +79,7 @@ Without `mongo-dot-notation` update instructions should look like:
 ``` javascript
   ...
   return collection.update(
-    { username: 'johndoe@test.com' },
+    { _id: 1 },
     {
       $set: {
         'env': 'demo',
@@ -624,18 +624,10 @@ Following aliases are defined in `mongo-dot-notation`:
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
-  owner: $.$and(7),
-  user: $.$or(1),
-  group: $.$xor(5),
+  owner: $.$and(7), // same as $.$bit().$and(7)
+  user: $.$or(1), // same as $.$bit().$or(1)
+  group: $.$xor(5), // same as $.$bit().$xor(5)
 })
-
-// { 
-//   '$bit': { 
-//     'owner': { and: 7 },
-//     'user': { or: 1 },
-//     'group': { xor: 5 },
-//   } 
-// }
 ```
 
 ## License
