@@ -433,22 +433,22 @@ describe('# Update operators', function () {
       });
       
       it('When null value specified returns null', function(){
-        expect($.$pushAll(null).value()).to.equal(null);
+        expect($.$pushAll(null).value()).to.deep.equal([null]);
       });
       
-      it('When scalar value specified returns value', function(){
+      it('When scalar value specified returns array of value', function(){
         var value = 100;
-        $.$pushAll(value).value().should.to.equal(value);
+        $.$pushAll(value).value().should.deep.equal([value]);
       });
       
-      it('When object value specified returns value', function(){
+      it('When object value specified returns array of value', function(){
         var value = { score: 8, item: 'B' };
-        $.$pushAll(value).value().should.to.deep.equal(value);
+        $.$pushAll(value).value().should.deep.equal([value]);
       });
       
       it('When array value specified returns array', function(){
         var value = ['A', 'B', 'C'];
-        $.$pushAll(value).value().should.to.deep.equal(value);
+        $.$pushAll(value).value().should.deep.equal(value);
       });
     });
     

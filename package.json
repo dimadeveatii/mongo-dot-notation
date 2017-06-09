@@ -37,7 +37,6 @@
     "perf": "node ./test/performance.js"
   },
   "devDependencies": {
-    "benchmark": "^2.1.4",
     "chai": "^4.0.1",
     "eslint": "^3.19.0",
     "istanbul": "^0.4.5",

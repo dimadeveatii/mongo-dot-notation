@@ -16,7 +16,7 @@ var instructions = $.flatten({
 })
 
 /*
-{
+var instructions = {
   $currentDate: {
     lastUpdate: { $type: 'date' }
   },
@@ -55,10 +55,10 @@ var url = 'mongodb://localhost:27017/mydatabase'
 
 MongoClient.connect(url).then(function(db) {
   return db.collection('users').update(
-    { username: 'johndoe@test.com' },
+    { _id: 1 },
     $.flatten({
       comments: $.$push('Logged in.').$each().$slice(-100),
-      system: 'demo',
+      env: 'demo',
       login: {
         date: $.$currentDate()
       },
@@ -82,7 +82,7 @@ Without `mongo-dot-notation` update instructions should look like:
     { username: 'johndoe@test.com' },
     {
       $set: {
-        'system': 'demo',
+        'env': 'demo',
         'account.attempts': 0
       },
       $push: {
@@ -110,8 +110,8 @@ Without `mongo-dot-notation` update instructions should look like:
 
 ## Tests
 
-To run the test suite make sure you have mongo installed locally on the default port (*27017*).
-Mongo is used to run integration tests.
+To run the test suite make sure you have mongo 2.6+ installed locally on the default port (*27017*).
+Mongo is used to run integration tests.  
 Once mongo is available, install the dependencies, then run `npm test`:
 
 ```bash
@@ -119,13 +119,15 @@ $ npm install
 $ npm test
 ```
 
+To calculate code coverage run `npm run-script test-ci`.
+
 ## API
 
 ## `.flatten()`
 Use `.flatten()` to transform objects:
 ```javascript
 var $ = require('mongo-dot-notation')
-$.flatten({
+var instructions = $.flatten({
   account: {
     name: 'hero'
   }
@@ -137,6 +139,7 @@ $.flatten({
 Checks if a given value is a `mongo-dot-notation` operator:
 ```javascript
 var $ = require('mongo-dot-notation')
+
 $.isOperator(1) // false
 $.isOperator({}) // false
 $.isOperator($.$set(10)) // true
@@ -151,20 +154,11 @@ See below the list of all supported mongo update opertors.
 #### `.$inc` 
 See mongo [**$inc**](https://docs.mongodb.com/manual/reference/operator/update/inc/).  
 
-The `$inc` operator increments a field by a specified value.
+The `$inc` operator increments a field by a specified value. If no value is provided, defaults to 1.
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
-  visits: $.$inc() // default: increments by 1
-})
-// { '$inc': { 'visits': 1 } }
-```
-
-Increment by a given value:
-```javascript
-var $ = require('mongo-dot-notation')
-$.flatten({
-  visits: $.$inc(5)
+  visits: $.$inc(5) // increment current visits value by 5
 })
 // { '$inc': { 'visits': 5 } }
 ```
@@ -176,7 +170,7 @@ Multiplies the value of a field by a number. (*Supported in mongo >= 2.6*)
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
-  price: $.$mul(0.75)
+  price: $.$mul(0.75) // multiply current price value by 0.75
 })
 // { '$mul': { 'price': 0.75 } }
 ```
@@ -188,7 +182,7 @@ The `$rename` operator updates the name of a field.
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
-  nmae: $.$rename('name')
+  nmae: $.$rename('name') // rename nmae field to name
 })
 // { '$rename': { 'nmae': 'name' } }
 ```
@@ -199,9 +193,14 @@ See mongo [**$setOnInsert**](https://docs.mongodb.com/manual/reference/operator/
 Assigns value to field only when the document is inserted (when an update operation is with `upsert:true`). (*Supported in mongo >= 2.4*)
 ```javascript
 var $ = require('mongo-dot-notation')
-$.flatten({
-  createdOn: $.$setOnInsert(new Date())
-})
+
+db.collection('users').update(
+  { _id: 1 }, 
+  $.flatten({
+    createdOn: $.$setOnInsert(new Date()) // sets createdOn field only when document is inserted
+  }), 
+  { upsert: true })
+
 // { '$setOnInsert': { 'createdOn': new Date() } }
 ```
 
@@ -235,11 +234,12 @@ $.flatten({
 // }
 ```
 
-The `$set` operator could also be used to reset an embedded field to a new document:
+The `$set` operator could also be used to update an embedded document entirely:
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
   name: 'Mike',
+  // contactDetails is updated to a new document
   contactDetails: $.$set({
     email: 'mike@test.com'
   })
@@ -260,7 +260,7 @@ The `$unset` operator deletes a particular field.
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
-  comments: $.$unset(),
+  comments: $.$unset(), // remove field from document
   history: $.$unset()
 })
 // { '$unset': { 'comments': '', 'history': '' } }
@@ -273,7 +273,7 @@ The `$min` updates the value of the field to a specified value if the specified 
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
-  low: $.$min(200)
+  low: $.$min(200) // update low to 200 if current low value is greater than 200
 })
 // { '$min': { 'low': 200 } }
 ```
@@ -285,7 +285,7 @@ The `$max` operator updates the value of the field to a specified value if the s
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
-  high: $.$max(450)
+  high: $.$max(450) // update high to 450 if current high value is less than 450
 })
 // { '$max': { 'high': 450 } }
 ```
@@ -293,7 +293,7 @@ $.flatten({
 #### `.$currentDate` 
 See mongo [**$currentDate**](https://docs.mongodb.com/manual/reference/operator/update/currentDate/).  
 
-The `$currentDate` operator sets the value of a field to the current date, either as a *Date* or a *timestamp*.
+The `$currentDate` operator sets the value of a field to the current date, either as a *Date* or a *Timestamp*.
 If type is not specified, uses *Date* by default.
 ```javascript
 var $ = require('mongo-dot-notation')
@@ -312,7 +312,7 @@ $.flatten({
 // { '$currentDate': { 'lastUpdated': { '$type': 'timestamp' } } }
 ```
 
-Also, for timestamp an alias operator is defiled in `mongo-dot-notation`:
+Also, for timestamp an alias operator is defined in `mongo-dot-notation`:
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
@@ -329,9 +329,9 @@ The positional `$` operator identifies an element in an array to update without 
 ```javascript
 var $ = require('mongo-dot-notation')
 db.students.update(
-   { _id: 1, grades: 80 },
+   { _id: 1, grades: 80 }, // match all elements from grades array where value equals to 80
    $.flatten({
-     grades: $.$().$set(82)
+     grades: $.$().$set(82) // for matched elements, update value to 82
    })
    
 )
@@ -342,7 +342,7 @@ In order to update the matched document's field:
 ```javascript
 var $ = require('mongo-dot-notation')
 db.students.update(
-   { _id: 1, grades: 80 },
+   { _id: 1, 'grades.grade': 80 },
    $.flatten({
      grades: $.$('std').$set(1.5)
    })
@@ -357,14 +357,14 @@ var $ = require('mongo-dot-notation')
 db.students.update(
    { _id: 1, grades: 80 },
    $.flatten({
-     grades: $.$().$mul(0.1)
+     grades: $.$().$mul(0.1) //multiplies matched array element by 0.1
    })
    
 )
 // { $mul: { "grades.$" : 0.1 } }
 ```
 
-Can also be used to update array element given an index:
+Can also be used to update an array element by a given index:
 ```javascript
 var $ = require('mongo-dot-notation')
 $.flatten({
@@ -479,7 +479,7 @@ $.flatten({
 // { '$pushAll': { 'values': [1, 2, 3] } }
 ```
 
-#### `$push` 
+#### `.$push` 
 See mongo [**$push**](https://docs.mongodb.com/manual/reference/operator/update/push/).  
 
 The `$push` operator appends a specified value to an array. Can also be used to slice and sort the array.
@@ -585,8 +585,19 @@ $.flatten({
 // }
 ```
 
+In case the array needs only to be sorted and/or sliced, `mongo-dot-notation` defines aliases:
+```javascript
+var $ = require('mongo-dot-notation')
+
+$.flatten({
+  grades: $.$sort({ grade: 1 }), // sames as $.push([]).$each().$sort({ grade: 1 })
+  scores: $.$slice(10), // sames as $.push([]).$each().$slice(1)
+  values: $.$sort().$slice(-5) // sames as $.push([]).$each().$sort().$slice(-5)
+})
+```
+
 ### Bitwise update operators
-#### `$bit` 
+#### `.$bit` 
 See mongo [**$bit**](https://docs.mongodb.com/manual/reference/operator/update/bit/).  
 
 The `$bit` operator performs a bitwise update of a field. The operator supports bitwise AND, bitwise OR, and bitwise XOR (i.e. exclusive or) operations.  
