@@ -3,6 +3,42 @@
 var should = require('chai').should();
 var expect = require('chai').expect;
 var $ = require('../index');
+var Operator = require('../lib/operator');
+
+describe('# Internals', function(){
+  describe('# Operator', function(){
+    it('Defines isOperator methos', function(){
+      Operator.should.itself.respondTo('isOperator');
+    });
+
+    it('When null name throws', function(){
+      expect(function(){ new Operator(); }).to.throw();
+    });
+
+    it('Name is set', function(){
+      new Operator('inc').should.have.property('name').
+        that.equals('inc');
+    });
+
+    it('When value not set defaults to undefined', function(){
+      expect(new Operator('test').value()).to.be.undefined;
+    });
+
+    it('When value set to null returns null value', function(){
+      expect(new Operator('test').value(null).value()).to.be.null;
+    });
+
+    it('When value set returns same value', function(){
+      var val = {};
+      new Operator('test').value(val).value().should.equal(val);
+    });
+
+    it('When value set chains self', function(){
+      var op = new Operator('test');
+      op.value({}).should.equal(op);
+    });
+  });
+});
 
 describe('# Update operators', function () {
   describe('# Field', function(){
@@ -182,6 +218,22 @@ describe('# Update operators', function () {
         $.$('std').name.should.equal('$.std');
       });
       
+      it('Appends index when number specified', function(){
+        $.$(3).name.should.equal('3');
+      });
+
+      it('Appends index when string number specified', function(){
+        $.$('3').name.should.equal('3');
+      });
+
+      it('Appends index with field when mathes number', function(){
+        $.$('3.std').name.should.equal('3.std');
+      });
+
+      it('Appends index with field when mathes 0', function(){
+        $.$('0.std').name.should.equal('0.std');
+      });
+
       it('Value throws when not set', function(){
         expect(function(){ $.$().value(); }).to.throw();
       });

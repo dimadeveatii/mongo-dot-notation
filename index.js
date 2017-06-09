@@ -7,7 +7,6 @@ extend(require('./lib/field'));
 extend(require('./lib/array'));
 extend(require('./lib/bitwise'));
 
-
 /*
 * @deprecated since version 1.1. Access operators directly.
 */

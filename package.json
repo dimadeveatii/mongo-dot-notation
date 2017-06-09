@@ -29,12 +29,15 @@
     "test": "mocha",
     "test-ci": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha --report html",
-    "lint": "eslint lib"
+    "lint": "eslint lib",
+    "perf": "node ./test/performance.js"
   },
   "devDependencies": {
+    "benchmark": "^2.1.4",
     "chai": "^4.0.1",
     "eslint": "^3.19.0",
     "istanbul": "^0.4.5",
+    "microtime": "^2.1.5",
     "mocha": "^3.4.2",
     "mocha-lcov-reporter": "^1.3.0",
     "mongodb": "^2.2.28"

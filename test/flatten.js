@@ -2,7 +2,7 @@
 
 var should = require('chai').should();
 var $ = require('../index');
-var ObjectID = require('mongodb').ObjectID;
+var mongo = require('mongodb');
 
 describe('# Flatten tests', function(){
   describe('# Primitive types', function () {
@@ -31,11 +31,6 @@ describe('# Flatten tests', function(){
       $.flatten(date).should.equal(date);
     });
 
-    it('When is ObjectID returns the reference', function () {
-      var id = new ObjectID();
-      $.flatten(id).should.equal(id);
-    });
-
     it('When is Array returns the array', function () {
       var arr = [1, 2, 3];
       $.flatten(arr).should.equal(arr);
@@ -47,8 +42,41 @@ describe('# Flatten tests', function(){
     });
   });
 
-  describe('# Simple objects', function () {
+  describe('# MongoDB types', function(){
+    var supportedTypes = [
+      'Binary',
+      'Code',
+      'DBRef',
+      'Decimal128',
+      'Double',
+      'Int32',
+      'Long',
+      'MaxKey',
+      'MinKey',
+      'ObjectID',
+      'BSONRegExp',
+      'Symbol',
+      'Timestamp'
+    ];
 
+    supportedTypes.forEach(function(mongoType){
+      describe(mongoType, function(){
+        it('Flatten directly', function(){
+          var id = new mongo[mongoType]();
+          $.flatten(id).should.equal(id);
+        });
+
+        it('Flatten as nested property', function(){
+          var data = {field: new mongo[mongoType]()};
+          $.flatten(data).should.have
+            .property('$set').that.have
+            .property('field').that.equals(data.field);
+        });
+      });
+    });
+  });
+
+  describe('# Simple objects', function () {
     it('When has `a` string property sets the property', function () {
       var obj = { a: 'test' };
       $.flatten(obj).should.have.property('$set')
@@ -319,7 +347,7 @@ describe('# Flatten tests', function(){
     });
 
     it('When has many inner properties with operators', function () {
-      var id = new ObjectID();
+      var id = new mongo.ObjectID();
       var obj = {
         id: id,
         a: {
