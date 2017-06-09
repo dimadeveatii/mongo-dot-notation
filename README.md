@@ -148,7 +148,7 @@ See below the list of all supported mongo update opertors.
 
 ### Field update operators
 
-#### [`$inc`](https://docs.mongodb.com/manual/reference/operator/update/inc/#up._S_inc)
+#### [`$inc`](https://docs.mongodb.com/manual/reference/operator/update/inc/)
 The `$inc` operator increments a field by a specified value.
 ```javascript
 var $ = require('mongo-dot-notation')
@@ -167,7 +167,7 @@ $.flatten({
 // { '$inc': { 'visits': 5 } }
 ```
 
-#### [`$mul`](https://docs.mongodb.com/manual/reference/operator/update/mul/#mul)
+#### [`$mul`](https://docs.mongodb.com/manual/reference/operator/update/mul/)
 Multiplies the value of a field by a number. (*Supported in mongo >= 2.6*)
 ```javascript
 var $ = require('mongo-dot-notation')
@@ -177,7 +177,7 @@ $.flatten({
 // { '$mul': { 'price': 0.75 } }
 ```
 
-#### [`$rename`](https://docs.mongodb.com/manual/reference/operator/update/rename/#rename)
+#### [`$rename`](https://docs.mongodb.com/manual/reference/operator/update/rename/)
 The $rename operator updates the name of a field.
 ```javascript
 var $ = require('mongo-dot-notation')
@@ -187,7 +187,7 @@ $.flatten({
 // { '$rename': { 'nmae': 'name' } }
 ```
 
-#### [`$setOnInsert`](https://docs.mongodb.com/manual/reference/operator/update/setOnInsert/#setoninsert)
+#### [`$setOnInsert`](https://docs.mongodb.com/manual/reference/operator/update/setOnInsert/)
 Assigns value to field only when the document is inserted (when an update operation is with `upsert:true`). (*Supported in mongo >= 2.4*)
 ```javascript
 var $ = require('mongo-dot-notation')
@@ -197,7 +197,7 @@ $.flatten({
 // { '$setOnInsert': { 'createdOn': new Date() } }
 ```
 
-#### [`$set`](https://docs.mongodb.com/manual/reference/operator/update/set/#set)
+#### [`$set`](https://docs.mongodb.com/manual/reference/operator/update/set/)
 The $set operator replaces the value of a field with the specified value.
 ```javascript
 var $ = require('mongo-dot-notation')
@@ -243,7 +243,7 @@ $.flatten({
 // }
 ```
 
-#### [`$unset`](https://docs.mongodb.com/manual/reference/operator/update/unset/#unset)
+#### [`$unset`](https://docs.mongodb.com/manual/reference/operator/update/unset/)
 The $unset operator deletes a particular field.
 ```javascript
 var $ = require('mongo-dot-notation')
@@ -254,7 +254,7 @@ $.flatten({
 // { '$unset': { 'comments': '', 'history': '' } }
 ```
 
-#### [`$min`](https://docs.mongodb.com/manual/reference/operator/update/min/#min)
+#### [`$min`](https://docs.mongodb.com/manual/reference/operator/update/min/)
 The $min updates the value of the field to a specified value if the specified value is less than the current value of the field.
 ```javascript
 var $ = require('mongo-dot-notation')
@@ -264,7 +264,7 @@ $.flatten({
 // { '$min': { 'low': 200 } }
 ```
 
-#### [`$max`](https://docs.mongodb.com/manual/reference/operator/update/max/#max)
+#### [`$max`](https://docs.mongodb.com/manual/reference/operator/update/max/)
 The $max operator updates the value of the field to a specified value if the specified value is greater than the current value of the field.
 ```javascript
 var $ = require('mongo-dot-notation')
@@ -274,7 +274,7 @@ $.flatten({
 // { '$max': { 'high': 450 } }
 ```
 
-#### [`$currentDate`](https://docs.mongodb.com/manual/reference/operator/update/currentDate/#currentdate)
+#### [`$currentDate`](https://docs.mongodb.com/manual/reference/operator/update/currentDate/)
 The $currentDate operator sets the value of a field to the current date, either as a *Date* or a *timestamp*.
 If type is not specified, uses *Date* by default.
 ```javascript
