@@ -75,6 +75,33 @@ describe('# Flatten tests', function(){
     });
   });
 
+  describe('# Nested operators ($ positional operator)', function () {
+    it('When positional operator with $set', function () {
+      var obj = { points: $.$().$set(10) };
+      $.flatten(obj).should.deep.equal({ $set: { 'points.$': 10 } });
+    });
+    
+    it('When positional operator with value', function () {
+      var obj = { points: $.$().value('test') };
+      $.flatten(obj).should.deep.equal({ $set: { 'points.$': 'test' } });
+    });
+    
+    it('When positional operator with $inc', function () {
+      var obj = { points: $.$().$inc(-1) };
+      $.flatten(obj).should.deep.equal({ $inc: { 'points.$': -1 } });
+    });
+    
+    it('When positional operator with field specified', function () {
+      var obj = { points: $.$('std').$set(0.5) };
+      $.flatten(obj).should.deep.equal({ $set: { 'points.$.std': 0.5 } });
+    });
+    
+    it('When positional operator with field specified in nested object', function () {
+      var obj = {stats: { group: { points: $.$('std').$set(0.5) }}};
+      $.flatten(obj).should.deep.equal({ $set: { 'stats.group.points.$.std': 0.5 } });
+    });
+  });
+  
   describe('# Empty values', function() {
 
     it('When property value is null sets to null', function () {

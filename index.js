@@ -1,22 +1,20 @@
 'use strict';
 
-var fieldOperators = require('./lib/fields'); 
-var arrayOperators = require('./lib/arrays'); 
-
 module.exports.isOperator = require('./lib/operator').isOperator;
 module.exports.flatten = require('./lib/flatten');
 
-// copy all field operators
-Object.keys(fieldOperators).forEach(function(operator){
-  module.exports[operator] = fieldOperators[operator];
-});
+extend(require('./lib/field'));
+extend(require('./lib/array'));
+extend(require('./lib/bitwise'));
 
-// copy all array operators
-Object.keys(arrayOperators).forEach(function(operator){
-  module.exports[operator] = arrayOperators[operator];
-});
 
 /*
 * @deprecated since version 1.1. Access operators directly.
 */
-module.exports.Operators = fieldOperators;
+module.exports.Operators = require('./lib/field');
+
+function extend(operators){
+  Object.keys(operators).forEach(function(operatorName){
+    module.exports[operatorName] = operators[operatorName];
+  });
+}
