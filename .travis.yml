@@ -1,10 +1,9 @@
 language: node_js
 node_js:
-  - "0.12"
-  - "4"
-  - "5"
-  - "6"
-  - "7"
+  - 8
+  - 10
+  - 12
+  - node
 cache:
   directories:
     - "node_modules"
@@ -16,5 +15,5 @@ addons:
     packages:
       - mongodb-org-server
       - mongodb-org-shell
-script: "npm run-script test-ci"
+script: "npm run ci"
 after_script: "npm install coveralls@2.13.1 && cat ./coverage/lcov.info | coveralls"

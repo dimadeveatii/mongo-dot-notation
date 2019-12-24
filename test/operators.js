@@ -1,546 +1,516 @@
 ﻿'use strict';
 
-var should = require('chai').should();
-var expect = require('chai').expect;
-var $ = require('../index');
-var Operator = require('../lib/operator');
+const expect = require('chai').expect;
+const $ = require('../index');
+const Operator = require('../lib/operator');
 
-describe('# Internals', function(){
-  describe('# Operator', function(){
-    it('Defines isOperator methos', function(){
+describe('# Internals', () => {
+  describe('# Operator', () => {
+    it('Defines isOperator methods', () => {
       Operator.should.itself.respondTo('isOperator');
     });
 
-    it('When null name throws', function(){
-      expect(function(){ new Operator(); }).to.throw();
+    it('When null name throws', () => {
+      expect(() => { new Operator(); }).to.throw();
     });
 
-    it('Name is set', function(){
+    it('Name is set', () => {
       new Operator('inc').should.have.property('name').
         that.equals('inc');
     });
 
-    it('When value not set defaults to undefined', function(){
+    it('When value not set defaults to undefined', () => {
       expect(new Operator('test').value()).to.be.undefined;
     });
 
-    it('When value set to null returns null value', function(){
+    it('When value set to null returns null value', () => {
       expect(new Operator('test').value(null).value()).to.be.null;
     });
 
-    it('When value set returns same value', function(){
-      var val = {};
+    it('When value set returns same value', () => {
+      const val = {};
       new Operator('test').value(val).value().should.equal(val);
     });
 
-    it('When value set chains self', function(){
-      var op = new Operator('test');
+    it('When value set chains self', () => {
+      const op = new Operator('test');
       op.value({}).should.equal(op);
     });
   });
 });
 
-describe('# Update operators', function () {
-  describe('# Field', function(){
+describe('# Update operators', () => {
+  describe('# Field', () => {
 
-    describe('$inc', function () {
-      it('Is operator', function () {
+    describe('$inc', () => {
+      it('Is operator', () => {
         $.isOperator($.$inc()).should.be.true;
       });
       
-      it('Has $inc name', function () {
+      it('Has $inc name', () => {
         $.$inc().name.should.equal('$inc');
       });
       
-      it('When argument is undefined defaults to 1', function () {
+      it('When argument is undefined defaults to 1', () => {
         $.$inc().value().should.equal(1);
       });
 
-      it('When argument is set uses its value', function () {
-        var value = 123;
+      it('When argument is set uses its value', () => {
+        const value = 123;
         $.$inc(value).value().should.equal(value);
       });
     });
 
-    describe('$mul', function () {
-      it('Is operator', function () {
+    describe('$mul', () => {
+      it('Is operator', () => {
         $.isOperator($.$mul()).should.be.true;
       });
       
-      it('Has $mul name', function () {
+      it('Has $mul name', () => {
         $.$mul().name.should.equal('$mul');
       });
       
-      it('When argument is undefined defaults to 1', function () {
+      it('When argument is undefined defaults to 1', () => {
         $.$mul().value().should.equal(1);
       });
 
-      it('When argument is set uses its value', function () {
-        var value = 10;
+      it('When argument is set uses its value', () => {
+        const value = 10;
         $.$mul(value).value().should.equal(value);
       });
     });
 
-    describe('$rename', function(){
-      it('Is operator', function () {
+    describe('$rename', () => {
+      it('Is operator', () => {
         $.isOperator($.$rename('field')).should.be.true;
       });
       
-      it('Has $rename name', function () {
+      it('Has $rename name', () => {
         $.$rename('field').name.should.equal('$rename');
       });
       
-      it('Has expected value', function () {
-        var value = 'test';
+      it('Has expected value', () => {
+        const value = 'test';
         $.$rename(value).value().should.equal(value);
       });
     });
 
-    describe('$setOnInsert', function(){
-      it('Is operator', function () {
+    describe('$setOnInsert', () => {
+      it('Is operator', () => {
         $.isOperator($.$setOnInsert(1)).should.be.true;
       });
       
-      it('Has $setOnInsert name', function () {
+      it('Has $setOnInsert name', () => {
         $.$setOnInsert(10).name.should.equal('$setOnInsert');
       });
 
-      it('Has expected value', function () {
-        var value = {x: 10, y: 20};
+      it('Has expected value', () => {
+        const value = {x: 10, y: 20};
         $.$setOnInsert(value).value().should.equal(value);
       });
     });
 
-    describe('$set', function(){
-      it('Is operator', function () {
+    describe('$set', () => {
+      it('Is operator', () => {
         $.isOperator($.$set(1)).should.be.true;
       });
       
-      it('Has $set name', function () {
+      it('Has $set name', () => {
         $.$set(10).name.should.equal('$set');
       });
       
-      it('Has expected value', function () {
-        var value = { x: 10, y: 20 };
+      it('Has expected value', () => {
+        const value = { x: 10, y: 20 };
         $.$set(value).value().should.equal(value);
       });
     });
 
-    describe('$unset', function(){
-      it('Is operator', function () {
+    describe('$unset', () => {
+      it('Is operator', () => {
         $.isOperator($.$unset()).should.be.true;
       });
       
-      it('Has $unset name', function () {
+      it('Has $unset name', () => {
         $.$unset().name.should.equal('$unset');
       });
       
-      it('Has empty string value', function () {
+      it('Has empty string value', () => {
         $.$unset().value().should.equal('');
       });
     });
 
-    describe('$min', function(){
-      it('Is operator', function () {
+    describe('$min', () => {
+      it('Is operator', () => {
         $.isOperator($.$min(1)).should.be.true;
       });
       
-      it('Has $min name', function () {
+      it('Has $min name', () => {
         $.$min(1).name.should.equal('$min');
       });
       
-      it('Has expected value', function () {
-        var value = 10;
+      it('Has expected value', () => {
+        const value = 10;
         $.$min(value).value().should.equal(value);
       });
     });
 
-    describe('$max', function(){
-      it('Is operator', function () {
+    describe('$max', () => {
+      it('Is operator', () => {
         $.isOperator($.$max(1)).should.be.true;
       });
       
-      it('Has $max name', function () {
+      it('Has $max name', () => {
         $.$max(1).name.should.equal('$max');
       });
       
-      it('Has expected value', function () {
-        var value = 10;
+      it('Has expected value', () => {
+        const value = 10;
         $.$max(value).value().should.equal(value);
       });
     });
 
-    describe('$currentDate', function(){
-      it('Is operator', function () {
+    describe('$currentDate', () => {
+      it('Is operator', () => {
         $.isOperator($.$currentDate()).should.be.true;
       });
       
-      it('Has $currentDate name', function () {
+      it('Has $currentDate name', () => {
         $.$currentDate().name.should.equal('$currentDate');
       });
       
-      it('When argument is undefined defaults to date type', function () {
+      it('When argument is undefined defaults to date type', () => {
         $.$currentDate().value().should.be.deep.equal({ $type: 'date' });
       });
 
-      it('When argument is set uses its value', function () {
+      it('When argument is set uses its value', () => {
         $.$currentDate('timestamp').value()
           .should.be.deep.equal({ $type: 'timestamp' });
       });
     });
 
-    describe('$timestamp *', function(){
-      it('Is operator', function () {
+    describe('$timestamp *', () => {
+      it('Is operator', () => {
         $.isOperator($.$timestamp()).should.be.true;
       });
       
-      it('Has $currentDate name', function () {
+      it('Has $currentDate name', () => {
         $.$timestamp().name.should.equal('$currentDate');
       });
       
-      it('Has timestamp type value', function () {
+      it('Has timestamp type value', () => {
         $.$timestamp().value().should.be.deep.equal({ $type: 'timestamp' });
       });
     });
   });
   
-  describe('# Array', function(){
-    describe('$', function(){
-      it('Is operator', function () {
+  describe('# Array', () => {
+    describe('$', () => {
+      it('Is operator', () => {
         $.isOperator($.$()).should.be.true;
       });
       
-      it('Has $ name when no field specified', function(){
+      it('Has $ name when no field specified', () => {
         $.$().name.should.equal('$');
       });
       
-      it('Appends field to name when field specified', function(){
+      it('Appends field to name when field specified', () => {
         $.$('std').name.should.equal('$.std');
       });
       
-      it('Appends index when number specified', function(){
+      it('Appends index when number specified', () => {
         $.$(3).name.should.equal('3');
       });
 
-      it('Appends index when string number specified', function(){
+      it('Appends index when string number specified', () => {
         $.$('3').name.should.equal('3');
       });
 
-      it('Appends index with field when mathes number', function(){
+      it('Appends index with field when mathes number', () => {
         $.$('3.std').name.should.equal('3.std');
       });
 
-      it('Appends index with field when mathes 0', function(){
+      it('Appends index with field when mathes 0', () => {
         $.$('0.std').name.should.equal('0.std');
       });
 
-      it('Value throws when not set', function(){
-        expect(function(){ $.$().value(); }).to.throw();
+      it('Value throws when not set', () => {
+        expect(() => { $.$().value(); }).to.throw();
       });
       
-      it('Value throws when not supported operator is set', function(){
-        expect(function(){ $.$().value($.$setOnInsert(10)); }).to.throw(/setOnInsert/);
+      it('Value throws when not supported operator is set', () => {
+        expect(() => { $.$().value($.$setOnInsert(10)); }).to.throw(/setOnInsert/);
       });
       
-      it('When value set defaults to $set', function(){
+      it('When value set defaults to $set', () => {
         $.$().value(101).value().value().should.equal(101);
       });
       
-      it('When value set with $set with null', function(){
+      it('When value set with $set with null', () => {
         expect($.$().value($.$set(null)).value().value()).to.be.null;
       });
       
-      it('When value set to null', function(){
-        var operator = $.$unset();
+      it('When value set to null', () => {
+        const operator = $.$unset();
         expect($.$().value($.$set(null)).value().value()).to.be.null;
       });
       
-      it('When value set with operator returns operator', function(){
-        var operator = $.$unset();
+      it('When value set with operator returns operator', () => {
+        const operator = $.$unset();
         $.$().value(operator).value().should.equal(operator);
       });
       
-      it('When chained operator', function(){
+      it('When chained operator', () => {
         $.$().$inc(10).value().should.have.property('name').that.equals('$inc');
       });
       
-      it('Is chainable with $inc', function(){
+      it('Is chainable with $inc', () => {
         $.$().should.respondTo('$inc');
       });
       
-      it('Is chainable with $mul', function(){
+      it('Is chainable with $mul', () => {
         $.$().should.respondTo('$mul');
       });
       
-      it('Is chainable with $set', function(){
+      it('Is chainable with $set', () => {
         $.$().should.respondTo('$set');
       });
       
-      it('Is chainable with $unset', function(){
+      it('Is chainable with $unset', () => {
         $.$().should.respondTo('$unset');
       });
       
-      it('Is chainable with $min', function(){
+      it('Is chainable with $min', () => {
         $.$().should.respondTo('$min');
       });
       
-      it('Is chainable with $max', function(){
+      it('Is chainable with $max', () => {
         $.$().should.respondTo('$max');
       });
       
-      it('Is chainable with $currentDate', function(){
+      it('Is chainable with $currentDate', () => {
         $.$().should.respondTo('$currentDate');
       });
       
-      it('Is chainable with $timestamp', function(){
+      it('Is chainable with $timestamp', () => {
         $.$().should.respondTo('$timestamp');
       });
     });
     
-    describe('$addToSet', function(){
-      it('Is operator', function () {
+    describe('$addToSet', () => {
+      it('Is operator', () => {
         $.isOperator($.$addToSet(1)).should.be.true;
       });
       
-      it('Has $addToSet name', function () {
+      it('Has $addToSet name', () => {
         $.$addToSet(1).name.should.equal('$addToSet');
       });
       
-      it('When is null value', function () {
+      it('When is null value', () => {
         expect($.$addToSet(null).value()).to.be.null;
       });
       
-      it('When is scalar value', function () {
-        var value = 10;
+      it('When is scalar value', () => {
+        const value = 10;
         $.$addToSet(value).value().should.equal(value);
       });
 
-      it('When is null value with each', function () {
+      it('When is null value with each', () => {
         $.$addToSet(null).$each().value().should.deep.equal({ '$each': [null] });
       });
       
-      it('When is array value', function () {
-        var value = [1, 2, 3];
+      it('When is array value', () => {
+        const value = [1, 2, 3];
         $.$addToSet(value).value().should.equal(value);
       });
       
-      it('When is scalar value with each', function () {
-        var value = 10;
+      it('When is scalar value with each', () => {
+        const value = 10;
         $.$addToSet(value).$each().value().should.deep.equal({ '$each': [10] });
       });
       
-      it('When is array value with each', function () {
-        var value = [1, 2, 3];
+      it('When is array value with each', () => {
+        const value = [1, 2, 3];
         $.$addToSet(value).$each().value().should.deep.equal({ '$each': [1, 2, 3] });
       });
     });
     
-    describe('$pop', function(){
-      it('Is operator', function () {
+    describe('$pop', () => {
+      it('Is operator', () => {
         $.isOperator($.$pop(1)).should.be.true;
       });
       
-      it('Has $pop name', function () {
+      it('Has $pop name', () => {
         $.$pop(1).name.should.equal('$pop');
       });
       
-      it('When direction not specified uses 1 by default', function(){
+      it('When direction not specified uses 1 by default', () => {
         $.$pop().value().should.equal(1);
       });
       
-      it('When direction is 1 uses 1', function(){
+      it('When direction is 1 uses 1', () => {
         $.$pop(1).value().should.equal(1);
       });
       
-      it('When direction is -1 uses -1', function(){
+      it('When direction is -1 uses -1', () => {
         $.$pop(-1).value().should.equal(-1);
       });
       
-      it('When chained with first uses -1', function(){
+      it('When chained with first uses -1', () => {
         $.$pop().first().value().should.equal(-1);
       });
       
-      it('When chained with last uses 1', function(){
+      it('When chained with last uses 1', () => {
         $.$pop().last().value().should.equal(1);
       });
     });
     
-    describe('$pullAll', function(){
-      it('Is operator', function () {
+    describe('$pullAll', () => {
+      it('Is operator', () => {
         $.isOperator($.$pullAll(1)).should.be.true;
       });
       
-      it('Has $pullAll name', function () {
+      it('Has $pullAll name', () => {
         $.$pullAll(1).name.should.equal('$pullAll');
       });
       
-      it('When null value specified returns array of null element', function(){
+      it('When null value specified returns array of null element', () => {
         $.$pullAll(null).value().should.deep.equal([null]);
       });
       
-      it('When empty array specified returns empty array', function(){
+      it('When empty array specified returns empty array', () => {
         $.$pullAll([]).value().should.deep.equal([]);
       });
       
-      it('When value specified returns array of value element', function(){
-        var value = 'Test';
+      it('When value specified returns array of value element', () => {
+        const value = 'Test';
         $.$pullAll(value).value().should.deep.equal([value]);
       });
       
       
-      it('When array specified returns array', function(){
-        var value = [1, 2, 3];
+      it('When array specified returns array', () => {
+        const value = [1, 2, 3];
         $.$pullAll(value).value().should.deep.equal(value);
       })
     });
     
-    describe('$pull', function(){
-      it('Is operator', function () {
+    describe('$pull', () => {
+      it('Is operator', () => {
         $.isOperator($.$pull(1)).should.be.true;
       });
       
-      it('Has $pull name', function () {
+      it('Has $pull name', () => {
         $.$pull(1).name.should.equal('$pull');
       });
       
-      it('When null value specified returns null', function(){
+      it('When null value specified returns null', () => {
         expect($.$pull(null).value()).to.equal(null);
       });
       
-      it('When scalar value specified returns value', function(){
-        var value = 100;
+      it('When scalar value specified returns value', () => {
+        const value = 100;
         $.$pull(value).value().should.to.equal(value);
       });
       
-      it('When object value specified returns value', function(){
-        var value = { score: 8, item: "B" };
+      it('When object value specified returns value', () => {
+        const value = { score: 8, item: "B" };
         $.$pull(value).value().should.to.deep.equal(value);
       });
       
-      it('When array value specified applies $in operator', function(){
-        var value = ['A', 'B', 'C'];
+      it('When array value specified applies $in operator', () => {
+        const value = ['A', 'B', 'C'];
         $.$pull(value).value().should.to.deep.equal({ '$in': value });
       });
     });
-    
-    describe('$pushAll', function(){
-      it('Is operator', function () {
-        $.isOperator($.$pushAll(1)).should.be.true;
-      });
-      
-      it('Has $pushAll name', function () {
-        $.$pushAll(1).name.should.equal('$pushAll');
-      });
-      
-      it('When null value specified returns null', function(){
-        expect($.$pushAll(null).value()).to.deep.equal([null]);
-      });
-      
-      it('When scalar value specified returns array of value', function(){
-        var value = 100;
-        $.$pushAll(value).value().should.deep.equal([value]);
-      });
-      
-      it('When object value specified returns array of value', function(){
-        var value = { score: 8, item: 'B' };
-        $.$pushAll(value).value().should.deep.equal([value]);
-      });
-      
-      it('When array value specified returns array', function(){
-        var value = ['A', 'B', 'C'];
-        $.$pushAll(value).value().should.deep.equal(value);
-      });
-    });
-    
-    describe('$push', function(){
-      it('Is operator', function () {
+
+    describe('$push', () => {
+      it('Is operator', () => {
         $.isOperator($.$push(1)).should.be.true;
       });
       
-      it('Has $push name', function(){
+      it('Has $push name', () => {
         $.$push().name.should.equal('$push');
       });
       
-      it('When null value specified returns null', function(){
+      it('When null value specified returns null', () => {
         expect($.$push(null).value()).to.equal(null);
       });
       
-      it('When undefined value specified returns undefined', function(){
+      it('When undefined value specified returns undefined', () => {
         expect($.$push().value()).to.equal(undefined);
       });
 
-      it('When scalar value specified returns value', function(){
-        var value = 9;
+      it('When scalar value specified returns value', () => {
+        const value = 9;
         $.$push(value).value().should.equal(value);
       });
       
-      it('When object value specified returns value', function(){
-        var value = { data: 'test'};
+      it('When object value specified returns value', () => {
+        const value = { data: 'test'};
         $.$push(value).value().should.deep.equal(value);
       });
       
-      it('When array value specified returns array', function(){
-        var value = [1, 2, 3];
+      it('When array value specified returns array', () => {
+        const value = [1, 2, 3];
         $.$push(value).value().should.deep.equal(value);
       });
       
-      it('When no value specified with $each', function(){
+      it('When no value specified with $each', () => {
         $.$push().$each().value().should.deep.equal({ '$each': []});
       });
       
-      it('When scalar value specified with $each', function(){
-        var value = 100;
+      it('When scalar value specified with $each', () => {
+        const value = 100;
         $.$push(value).$each().value().should.deep.equal({ '$each': [value]});
       });
       
-      it('When array value specified with $each', function(){
-        var value = [1, 2, 3];
+      it('When array value specified with $each', () => {
+        const value = [1, 2, 3];
         $.$push(value).$each().value().should.deep.equal({ '$each': value});
       });
       
-      it('When using $slice without $each throws', function(){
-        expect(function(){ $.$push(10).$slice(1); }).to.throw(/\$slice/);
+      it('When using $slice without $each throws', () => {
+        expect(() => { $.$push(10).$slice(1); }).to.throw(/\$slice/);
       });
       
-      it('When using $slice with empty value is ignored', function(){
+      it('When using $slice with empty value is ignored', () => {
         $.$push(10).$each().$slice().value()
           .should.deep.equal({'$each': [10]});
       });
       
-      it('When using $slice sets value', function(){
+      it('When using $slice sets value', () => {
         $.$push(10).$each().$slice(-3).value()
           .should.deep.equal({'$each': [10], '$slice': -3});
       });
       
-      it('When using $sort without $each throws', function(){
-        expect(function(){ $.$push(10).$sort(1); }).to.throw(/\$sort/);
+      it('When using $sort without $each throws', () => {
+        expect(() => { $.$push(10).$sort(1); }).to.throw(/\$sort/);
       });
       
-      it('When using $sort with empty value uses 1 by default', function(){
+      it('When using $sort with empty value uses 1 by default', () => {
         $.$push(10).$each().$sort().value()
           .should.deep.equal({'$each': [10], '$sort': 1});
       });
       
-      it('When using $sort sets value', function(){
+      it('When using $sort sets value', () => {
         $.$push(10).$each().$sort({ val: 1 }).value()
           .should.deep.equal({'$each': [10], '$sort': { val: 1}});
       });
       
-      it('When using $position without $each throws', function(){
-        expect(function(){ $.$push(10).$position(1); }).to.throw(/\$position/);
+      it('When using $position without $each throws', () => {
+        expect(() => { $.$push(10).$position(1); }).to.throw(/\$position/);
       });
       
-      it('When using $position with empty value is ignored', function(){
+      it('When using $position with empty value is ignored', () => {
         $.$push(10).$each().$position().value()
           .should.deep.equal({'$each': [10]});
       });
       
-      it('When using $position sets value', function(){
+      it('When using $position sets value', () => {
         $.$push(10).$each().$position(0).value()
           .should.deep.equal({'$each': [10], '$position': 0});
       });
       
-      it('When using $each, $slice, $sort and $position', function(){
+      it('When using $each, $slice, $sort and $position', () => {
         $.$push([{score: 9}, {score: 10}, {score: 7}])
           .$each()
           .$position(0)
@@ -556,112 +526,112 @@ describe('# Update operators', function () {
       });
     });
     
-    describe('$slice *', function(){
-      it('Is operator', function () {
+    describe('$slice *', () => {
+      it('Is operator', () => {
         $.isOperator($.$slice(1)).should.be.true;
       });
       
-      it('Has $push name', function(){
+      it('Has $push name', () => {
         $.$slice(1).name.should.equal('$push');
       });
       
-      it('Is same as $push of empty array', function(){
+      it('Is same as $push of empty array', () => {
         $.$slice(1).value().should.deep.equal({ '$each': [], '$slice': 1 });
       });
     });
     
-    describe('$sort *', function(){
-      it('Is operator', function () {
+    describe('$sort *', () => {
+      it('Is operator', () => {
         $.isOperator($.$sort(1)).should.be.true;
       });
       
-      it('Has $push name', function(){
+      it('Has $push name', () => {
         $.$sort(1).name.should.equal('$push');
       });
       
-      it('Is same as $push of empty array', function(){
+      it('Is same as $push of empty array', () => {
         $.$sort(1).value().should.deep.equal({ '$each': [], '$sort': 1 });
       });
     });
   });
   
-  describe('# Bitwise', function(){
-    describe('$bit', function(){
-      it('Is operator', function () {
+  describe('# Bitwise', () => {
+    describe('$bit', () => {
+      it('Is operator', () => {
         $.isOperator($.$bit()).should.be.true;
       });
       
-      it('Has $bit name', function(){
+      it('Has $bit name', () => {
         $.$bit().name.should.equal('$bit');
       });
       
-      it('Is chainable with $and', function(){
+      it('Is chainable with $and', () => {
         $.$bit().should.respondTo('$and');
       });
       
-      it('When chained with $and sets value', function(){
+      it('When chained with $and sets value', () => {
         $.$bit().$and(1).value().should.deep.equal({ 'and': 1 });
       });
       
-      it('Is chainable with $or', function(){
+      it('Is chainable with $or', () => {
         $.$bit().should.respondTo('$or');
       });
       
-      it('When chained with $or sets value', function(){
+      it('When chained with $or sets value', () => {
         $.$bit().$or(1).value().should.deep.equal({ 'or': 1 });
       });
       
-      it('Is chainable with $xor', function(){
+      it('Is chainable with $xor', () => {
         $.$bit().should.respondTo('$xor');
       });
       
-      it('When chained with $or sets value', function(){
+      it('When chained with $or sets value', () => {
         $.$bit().$xor(1).value().should.deep.equal({ 'xor': 1 });
       });
       
-      it('Value throws', function(){
-        expect(function(){ $.$bit().value(); }).to.throw();
+      it('Value throws', () => {
+        expect(() => { $.$bit().value(); }).to.throw();
       });
     });
     
-    describe('$and *', function(){
-      it('Is operator', function () {
+    describe('$and *', () => {
+      it('Is operator', () => {
         $.isOperator($.$and(5)).should.be.true;
       });
       
-      it('Has $bit name', function(){
+      it('Has $bit name', () => {
         $.$and(5).name.should.equal('$bit');
       });
       
-      it('When value provided', function(){
+      it('When value provided', () => {
         $.$and(5).value().should.deep.equal({ 'and': 5 });
       });
     });
     
-    describe('$or *', function(){
-      it('Is operator', function () {
+    describe('$or *', () => {
+      it('Is operator', () => {
         $.isOperator($.$or(5)).should.be.true;
       });
       
-      it('Has $bit name', function(){
+      it('Has $bit name', () => {
         $.$or(5).name.should.equal('$bit');
       });
       
-      it('When value provided', function(){
+      it('When value provided', () => {
         $.$or(5).value().should.deep.equal({ 'or': 5 });
       });
     });
     
-    describe('$xor *', function(){
-      it('Is operator', function () {
+    describe('$xor *', () => {
+      it('Is operator', () => {
         $.isOperator($.$xor(5)).should.be.true;
       });
       
-      it('Has $bit name', function(){
+      it('Has $bit name', () => {
         $.$xor(5).name.should.equal('$bit');
       });
       
-      it('When value provided', function(){
+      it('When value provided', () => {
         $.$xor(5).value().should.deep.equal({ 'xor': 5 });
       });
     });
