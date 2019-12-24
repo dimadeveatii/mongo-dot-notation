@@ -52,6 +52,7 @@ describe('# Flatten tests', () => {
       'Long',
       'MaxKey',
       'MinKey',
+      'ObjectId',
       'ObjectID',
       'BSONRegExp',
       'Symbol',
