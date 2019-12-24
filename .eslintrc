@@ -4,11 +4,11 @@
     "node": true,
     "mocha": true
    },
-   "ecmaFeatures": {
-     "es6": false
-   },
    "plugins": [
    ],
+   "parserOptions": {
+      "ecmaVersion": 2015
+   },
    "rules": {
      "no-console":0,
      "indent": [
