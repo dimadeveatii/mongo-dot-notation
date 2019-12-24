@@ -37,7 +37,7 @@ const instructions = {
   - `Field` update operators
   - `Array` update operators
   - `Bitwise` update operators
-- Supports Node.js V8 and above
+- Supports Node.js v6 and above
 - No `npm` dependencies on `mongo`
 
 ## Usage
