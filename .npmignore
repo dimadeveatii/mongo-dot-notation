@@ -1,0 +1,9 @@
+.npmignore
+.gitignore
+.eslintrc
+.editorconfig
+.travis.yml
+coverage/
+test/
+node_modules/
+.vscode
