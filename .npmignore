@@ -10,7 +10,12 @@ docker-compose.yml
 Dockerfile
 jest.config.ts
 tsconfig.ts
+CHANGELOG.md
+CODE-OF-CONDUCT.md
+CONTRIBUTING.md
+tsconfig.json
 .vscode/
+.github/
 coverage/
 node_modules/
 src/
