@@ -41,7 +41,7 @@ jobs:
 
       - name: e2e tests
         run: npm run test:e2e:docker
-        timeout-minutes: 1
+        timeout-minutes: 3
 
       - name: Get version
         run: echo "::set-output name=NPM_VERSION::${GITHUB_REF#refs/*/v}"
