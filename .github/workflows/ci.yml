@@ -43,3 +43,4 @@ jobs:
 
       - name: e2e tests
         run: npm run test:e2e:docker
+        timeout-minutes: 1

@@ -222,43 +222,43 @@ See the [end-to-end](tests/mongo.e2e.ts) tests file for more examples.
 
 - [Field update operators](#field-update-operators)
 
-  - [$currentDate](#$currentDate)
-  - [$timestamp](#$timestamp)
-  - [$inc](#$inc)
-  - [$min](#$min)
-  - [$max](#$max)
-  - [$mul](#$mul)
-  - [$rename](#$rename)
-  - [$set](#$set)
-  - [$setOnInsert](#$setOnInsert)
-  - [$unset](#$unset)
+  - [$currentDate](#currentdate)
+  - [$timestamp](#timestamp)
+  - [$inc](#inc)
+  - [$min](#min)
+  - [$max](#max)
+  - [$mul](#mul)
+  - [$rename](#rename)
+  - [$set](#set)
+  - [$setOnInsert](#setoninsert)
+  - [$unset](#unset)
 
 - [Array update operators](#array-update-operators)
 
-  - [$](#$$)
-  - [$addToSet](#$addToSet)
-  - [$pop](#$pop)
-  - [$pull](#$pull)
-  - [$push](#$push)
-  - [$pullAll](#$pullAll)
-  - [$slice](#$slice)
-  - [$sort](#$sort)
+  - [$](#positional)
+  - [$addToSet](#addtoset)
+  - [$pop](#pop)
+  - [$pull](#pull)
+  - [$push](#push)
+  - [$pullAll](#pullall)
+  - [$slice](#slice)
+  - [$sort](#sort)
 
 - [Bitwise update operators](#bitwise-update-operators)
 
-  - [$bit](#$bit)
-  - [$and](#$and)
-  - [$or](#$or)
-  - [$xor](#$xor)
+  - [$bit](#bit)
+  - [$and](#and)
+  - [$or](#or)
+  - [$xor](#xor)
 
 ### Options
 
 The following options are available:
 
-| Option           | Description                                                                                   |
-| ---------------- | --------------------------------------------------------------------------------------------- |
-| array            | _(default `false`)_ if true, arrays will be flattened and their indexes will be used as keys. |
-| skipEmptyObjects | _(default `false`)_ if true, empty objects are ignored and removed from the flattened result. |
+| Option             | Description                                                                                   |
+| ------------------ | --------------------------------------------------------------------------------------------- |
+| `array`            | _(default `false`)_ if true, arrays will be flattened and their indexes will be used as keys. |
+| `skipEmptyObjects` | _(default `false`)_ if true, empty objects are ignored and removed from the flattened result. |
 
 **Example:**
 
@@ -536,7 +536,7 @@ flatten({
 
 ### Array update operators
 
-### $
+### $ _(positional)_
 
 > `$(field?: number | string)`
 
@@ -623,7 +623,7 @@ flatten({ grades: $pop().first() });
 > `$pull<T>(value: T | T[])`
 
 Removes from an existing array all instances of a value or values that match a specified condition.
-Unlike the [$pullAll](#$pullAll) operator, this operator can be used to remove all instances that match a query.
+Unlike the [$pullAll](#pullall) operator, this operator can be used to remove all instances that match a query.
 
 | Param | Description                                                              |
 | ----- | ------------------------------------------------------------------------ |
