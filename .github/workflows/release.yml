@@ -60,7 +60,7 @@ jobs:
           zip -r ${{ github.event.repository.name }}.${{steps.npm-version.outputs.NPM_VERSION}}.zip \
           README.md \
           LICENSE \
-          package.json \ 
+          package.json \
           dist
 
       - name: GitHub release
