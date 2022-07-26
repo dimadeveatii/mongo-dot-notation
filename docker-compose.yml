@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  mongodb:
+    container_name: mongodb
+    image: mongo:5
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: secret
+      MONGO_INITDB_DATABASE: e2e
+  node:
+    container_name: node
+    build: .
+    tty: true
+    environment:
+      MONGODB_URL: mongodb://root:secret@mongodb:27017/e2e?authSource=admin
+    links:
+      - mongodb:mongodb
+    depends_on:
+      - mongodb

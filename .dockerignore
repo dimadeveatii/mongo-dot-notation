@@ -1,3 +1,4 @@
+.github
 .dockerignore
 .editorconfig
 .eslintignore
@@ -6,12 +7,7 @@
 .npmignore
 .prettierignore
 .prettierrc.json
-docker-compose.yml
-Dockerfile
-jest.config.ts
-tsconfig.ts
-.vscode/
+.vscode
 coverage/
+dist/
 node_modules/
-src/
-tests/

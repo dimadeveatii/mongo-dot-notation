@@ -1,10 +1,12 @@
 # Changelog
 
+For version 3 and above, please see the list of changes on the [Releases](https://github.com/dimadeveatii/mongo-dot-notation/releases) page.
+
 ## v2.0.0
 
 ### Breaking changes
 
-- Dropped support of older Node.js versions. Officially supports Node.js version 8 and above.  
+- Dropped support of older Node.js versions. Officially supports Node.js version 8 and above.
 
 - Removed exported `Operators` object. Use instead operators on the root.
 
