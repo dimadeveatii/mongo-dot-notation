@@ -235,7 +235,7 @@ See the [end-to-end](tests/mongo.e2e.ts) tests file for more examples.
 
 - [Array update operators](#array-update-operators)
 
-  - [$](#positional)
+  - [$](#-positional)
   - [$addToSet](#addtoset)
   - [$pop](#pop)
   - [$pull](#pull)

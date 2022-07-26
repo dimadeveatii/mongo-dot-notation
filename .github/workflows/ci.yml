@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  cd:
+  ci:
     runs-on: ubuntu-latest
 
     steps:
@@ -44,3 +44,8 @@ jobs:
       - name: e2e tests
         run: npm run test:e2e:docker
         timeout-minutes: 1
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
