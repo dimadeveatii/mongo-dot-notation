@@ -48,7 +48,7 @@ jobs:
         id: npm-version
 
       - name: Set version
-        run: npm version ${{steps.npm-version.outputs.NPM_VERSION}} --no-commit-hooks --no-git-tag-version
+        run: npm version ${{steps.npm-version.outputs.NPM_VERSION}} --no-commit-hooks --no-git-tag-version --allow-same-version
 
       - name: NPM Publish
         run: npm publish
