@@ -206,7 +206,7 @@ const student = {
 student.updateOne(
   { _id: 1 },
   flatten(student), // { $mul: { "grades.$[element].value" : 10 } }
-  { arrayFilters: [{ element: { $lte: 9 } }] }
+  { arrayFilters: [{ 'element.value': { $lte: 9 } }] }
 );
 ```
 
