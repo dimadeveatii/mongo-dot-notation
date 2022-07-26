@@ -4,7 +4,7 @@ Transform objects to MongoDB update instructions.
 
 [![NPM Version](https://img.shields.io/npm/v/mongo-dot-notation.svg)](https://npmjs.org/package/mongo-dot-notation)
 [![Build status](https://github.com/dimadeveatii/mongo-dot-notation/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/dimadeveatii/mongo-dot-notation/actions/workflows/ci.yml?query=branch%3Amain++)
-[![Coverage Status](https://coveralls.io/repos/github/dimadeveatii/mongo-dot-notation/badge.svg)](https://coveralls.io/github/dimadeveatii/mongo-dot-notation)
+[![Coverage Status](https://coveralls.io/repos/github/dimadeveatii/mongo-dot-notation/badge.svg?branch=main)](https://coveralls.io/github/dimadeveatii/mongo-dot-notation?branch=main)
 [![Downloads](https://img.shields.io/npm/dm/mongo-dot-notation)](https://npmjs.org/package/mongo-dot-notation)
 
 ```ts
