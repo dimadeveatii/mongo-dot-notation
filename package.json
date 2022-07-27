@@ -1,7 +1,7 @@
 {
   "name": "mongo-dot-notation",
   "version": "3.0.0",
-  "description": "Transform objects to mongo update instructions",
+  "description": "Transform objects to MongoDB update instructions",
   "author": {
     "name": "Dumitru Deveatii",
     "email": "dimadeveatii@gmail.com"

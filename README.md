@@ -2,9 +2,9 @@
 
 Transform objects to MongoDB update instructions.
 
-[![NPM Version](https://img.shields.io/npm/v/mongo-dot-notation.svg)](https://npmjs.org/package/mongo-dot-notation)
 [![Build status](https://github.com/dimadeveatii/mongo-dot-notation/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/dimadeveatii/mongo-dot-notation/actions/workflows/ci.yml?query=branch%3Amain++)
 [![Coverage Status](https://coveralls.io/repos/github/dimadeveatii/mongo-dot-notation/badge.svg?branch=main)](https://coveralls.io/github/dimadeveatii/mongo-dot-notation?branch=main)
+[![NPM Version](https://img.shields.io/npm/v/mongo-dot-notation.svg)](https://npmjs.org/package/mongo-dot-notation)
 [![Downloads](https://img.shields.io/npm/dm/mongo-dot-notation)](https://npmjs.org/package/mongo-dot-notation)
 
 ```ts
@@ -43,10 +43,10 @@ npm install mongo-dot-notation
 
 ## Highlights
 
-- Fully supported MongoDB [update operators](https://www.mongodb.com/docs/manual/reference/operator/update/)
-  - _Field_
-  - _Array_
-  - _Bitwise_
+- Supports all MongoDB [update operators](https://www.mongodb.com/docs/manual/reference/operator/update/)
+  - Field update operators
+  - Array update operators
+  - Bitwise update operators
 - No `npm` dependency on `mongo`
 - Written in TypeScript
   - Type definitions for all exported functions
@@ -113,7 +113,7 @@ The above `user` object is flattened to:
 ### Using positional operator
 
 ```ts
-import { flatten } from 'mongo-dot-notation';
+import { flatten, $, $inc } from 'mongo-dot-notation';
 
 const student = {
   grades: $().$inc(),
@@ -130,7 +130,7 @@ student.updateOne(
 The position operator supports updating a nested document:
 
 ```ts
-import { flatten } from 'mongo-dot-notation';
+import { flatten, $, $inc } from 'mongo-dot-notation';
 
 const student = {
   grades: $('value').$inc(),
@@ -147,7 +147,7 @@ student.updateOne(
 To update all elements in a array, use _all positional_ operator:
 
 ```ts
-import { flatten } from 'mongo-dot-notation';
+import { flatten, $, $inc } from 'mongo-dot-notation';
 
 const student = {
   grades: $('[]').$inc(),
@@ -163,7 +163,7 @@ student.updateOne(
 Similarly, updating nested documents:
 
 ```ts
-import { flatten } from 'mongo-dot-notation';
+import { flatten, $, $inc } from 'mongo-dot-notation';
 
 const student = {
   grades: $('[].values').$inc(),
@@ -179,7 +179,7 @@ student.updateOne(
 ### Using filtered positional operator
 
 ```ts
-import { flatten, $mul } from 'mongo-dot-notation';
+import { flatten, $, $mul } from 'mongo-dot-notation';
 
 const student = {
   grades: $('[element]').$mul(9),
@@ -196,7 +196,7 @@ student.updateOne(
 Similarly, updating nested documents:
 
 ```ts
-import { flatten, $mul } from 'mongo-dot-notation';
+import { flatten, $, $mul } from 'mongo-dot-notation';
 
 const student = {
   grades: $('[element].value').$mul(9),
@@ -282,10 +282,10 @@ flatten({ left: { x: 1 }, right: {} }, { skipEmptyObjects: false });
 
 Transforms a given object into the MongoDB's update instructions.
 
-| Option  | Description                                              |
-| ------- | -------------------------------------------------------- |
-| obj     | _(required)_ the input object to transform               |
-| options | _(optional)_ additional options, see [Options](#options) |
+| Param     | Description                                              |
+| --------- | -------------------------------------------------------- |
+| `obj`     | _(required)_ the input object to transform               |
+| `options` | _(optional)_ additional options, see [Options](#options) |
 
 **Example:**
 
@@ -307,6 +307,10 @@ flatten({
 > `isOperator<T>(obj: T): boolean`
 
 Checks if a given object is an operator.
+
+| Param | Description                            |
+| ----- | -------------------------------------- |
+| `obj` | _(required)_ the input object to check |
 
 **Example:**
 
@@ -363,9 +367,9 @@ flatten({
 
 Increments a field by a specified value.
 
-| Param | Description                   |
-| ----- | ----------------------------- |
-| value | _(default 1)_ increment value |
+| Param   | Description                   |
+| ------- | ----------------------------- |
+| `value` | _(default 1)_ increment value |
 
 **Example:**
 
@@ -384,9 +388,9 @@ flatten({
 
 Updates the value of the field to a specified value if the specified value is **less than** the current value of the field.
 
-| Param | Description            |
-| ----- | ---------------------- |
-| value | _(required)_ min value |
+| Param   | Description            |
+| ------- | ---------------------- |
+| `value` | _(required)_ min value |
 
 **Example:**
 
@@ -404,9 +408,9 @@ flatten({
 
 Updates the value of the field to a specified value if the specified value is **greater than** the current value of the field.
 
-| Param | Description            |
-| ----- | ---------------------- |
-| value | _(required)_ max value |
+| Param   | Description            |
+| ------- | ---------------------- |
+| `value` | _(required)_ max value |
 
 **Example:**
 
@@ -424,9 +428,9 @@ flatten({
 
 Multiplies the value of a field by a number.
 
-| Param | Description                   |
-| ----- | ----------------------------- |
-| value | _(default 1)_ multiply factor |
+| Param   | Description                   |
+| ------- | ----------------------------- |
+| `value` | _(default 1)_ multiply factor |
 
 **Example:**
 
@@ -444,9 +448,9 @@ flatten({
 
 Updates the name of a field.
 
-| Param | Description                 |
-| ----- | --------------------------- |
-| field | _(required)_ new field name |
+| Param   | Description                 |
+| ------- | --------------------------- |
+| `field` | _(required)_ new field name |
 
 **Example:**
 
@@ -467,9 +471,9 @@ flatten({
 Replaces the value of a field with the specified value.  
 This is an implicit operator, but could be useful when an entire object should be replaced.
 
-| Param | Description                    |
-| ----- | ------------------------------ |
-| value | _(required)_ replacement value |
+| Param   | Description                    |
+| ------- | ------------------------------ |
+| `value` | _(required)_ replacement value |
 
 **Example:**
 
@@ -500,9 +504,9 @@ Assigns the specified value to the field when `{ upsert: true }` operation is us
 results in a new document being created. If the update operation does not result in an insert,
 does nothing.
 
-| Param | Description                                        |
-| ----- | -------------------------------------------------- |
-| value | _(required)_ the value to set on document creation |
+| Param   | Description                                        |
+| ------- | -------------------------------------------------- |
+| `value` | _(required)_ the value to set on document creation |
 
 **Example:**
 
@@ -543,9 +547,9 @@ flatten({
 The positional operator identifies **an element** or **multiple elements** matching a
 given query condition to be updated in an array.
 
-| Param | Description                                                                                                                                                                                                                                                            |
-| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| field | _(optional)_ when empty - performs the update on array's element, when a number or a string starting with a number - specifies the index of the element to update or its field, when starts with "[]" or "[query]" specifies that this is an _all positional_ operator |
+| Param   | Description                                                                                                                                                                                                                                                                          |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `field` | _(optional)_ when empty - performs the update on array's element; <br/>when a number or a string starting with a number, specifies the index of the element to update or its field;<br/>when starts with `"[]"` or `"[query]"`, specifies that this is an _all positional_ operator; |
 
 **Example:**
 
@@ -578,9 +582,9 @@ collection.updateOne(criteria, flatten({ grades: $('[element].grade').$inc(10) }
 Adds a value to an array unless the value is already present.
 To add multiple values, chain with `$each` operator.
 
-| Param | Description                              |
-| ----- | ---------------------------------------- |
-| value | _(required)_ the value to add to the set |
+| Param   | Description                              |
+| ------- | ---------------------------------------- |
+| `value` | _(required)_ the value to add to the set |
 
 Note that while `$addToSet([1, 2])` adds the entire array as single element,
 `$addToSet([1, 2]).$each()` adds 1 and 2 as separate elements.
@@ -603,9 +607,9 @@ flatten({ permissions: $addToSet(['read', 'write']).$each() });
 
 Removes the first or last element of an array
 
-| Param | Description                                                                            |
-| ----- | -------------------------------------------------------------------------------------- |
-| value | _(default 1)_ specify `-1` to remove the first element, `1` to remove the last element |
+| Param   | Description                                                                            |
+| ------- | -------------------------------------------------------------------------------------- |
+| `value` | _(default 1)_ specify `-1` to remove the first element, `1` to remove the last element |
 
 **Example:**
 
@@ -614,6 +618,11 @@ Removes the first or last element of an array
 flatten({ grades: $pop(-1) });
 // equivalent to:
 flatten({ grades: $pop().first() });
+
+// remove the last element from the array
+flatten({ scores: $pop(1) });
+// equivalent to:
+flatten({ scores: $pop().last() });
 ```
 
 [MongoDB manual](https://www.mongodb.com/docs/manual/reference/operator/update/pop/)
@@ -625,9 +634,9 @@ flatten({ grades: $pop().first() });
 Removes from an existing array all instances of a value or values that match a specified condition.
 Unlike the [$pullAll](#pullall) operator, this operator can be used to remove all instances that match a query.
 
-| Param | Description                                                              |
-| ----- | ------------------------------------------------------------------------ |
-| value | _(required)_ the value(s) or condition to match to remove from the array |
+| Param   | Description                                                                        |
+| ------- | ---------------------------------------------------------------------------------- |
+| `value` | _(required)_ the value(s) to remove or the condition to match for removed elements |
 
 **Example:**
 
@@ -654,9 +663,9 @@ Can be chained with `.$slice()`, `.$sort()` and `.$position()` modifiers to spec
 The order in which additional operators are chained doesn't matter, so that `$push().$each().$slice().$sort()` is the same as
 `$push().$each().$sort().$slice()`.
 
-| Param | Description                                      |
-| ----- | ------------------------------------------------ |
-| value | _(optional)_ the value(s) to append to the array |
+| Param   | Description                                      |
+| ------- | ------------------------------------------------ |
+| `value` | _(optional)_ the value(s) to append to the array |
 
 **Example:**
 
@@ -685,9 +694,9 @@ flatten({ scores: $push(7).$each().$position(2) });
 
 Removes all instances of the specified values from an existing array.
 
-| Param | Description                                        |
-| ----- | -------------------------------------------------- |
-| value | _(required)_ the value(s) to remove from the array |
+| Param   | Description                                        |
+| ------- | -------------------------------------------------- |
+| `value` | _(required)_ the value(s) to remove from the array |
 
 **Example:**
 
@@ -708,9 +717,9 @@ flatten({ score: $pullAll(0) });
 Limits the number of array elements.
 Alias for `$push().$each().$slice()`.
 
-| Param | Description                             |
-| ----- | --------------------------------------- |
-| count | _(required)_ number of elements to take |
+| Param   | Description                             |
+| ------- | --------------------------------------- |
+| `count` | _(required)_ number of elements to take |
 
 **Example:**
 
@@ -734,9 +743,9 @@ flatten({ grades: $slice(0) });
 Orders the elements of an array.
 Alias for `$push().$each().$sort()`.
 
-| Param         | Description                      |
-| ------------- | -------------------------------- |
-| specification | _(default 1)_ sort specification |
+| Param           | Description                      |
+| --------------- | -------------------------------- |
+| `specification` | _(default 1)_ sort specification |
 
 **Example:**
 
@@ -762,7 +771,7 @@ flatten({ users: $sort({ name: 1 }) });
 > `$bit()`
 
 Performs a bitwise update of a field.
-Should be chained with the a logical operator.
+Should be chained with a logical operator.
 
 **Example:**
 
