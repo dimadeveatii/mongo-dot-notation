@@ -210,6 +210,72 @@ student.updateOne(
 );
 ```
 
+### Merge array documents
+
+Using positional operator to merge fields into the matched element:
+
+```ts
+import { flatten, $, $inc, $currentDate } from 'mongo-dot-notation';
+
+const student = {
+  grades: $().merge({
+    class: '101',
+    prof: 'Alice',
+    value: $inc(),
+    date: $currentDate(),
+  }),
+};
+
+flatten(student);
+```
+
+Result:
+
+```json
+{
+  "$set": {
+    "grades.$.class": "101",
+    "grades.$.prof": "Alice"
+  },
+  "$inc": {
+    "grades.$.value": 1
+  },
+  "$currentDate": {
+    "grades.$.date": { "$type": "date" }
+  }
+}
+```
+
+To update all elements, use `$('[]')` instead of `$()` in the above example.
+
+### Update nested arrays
+
+Using positional operator to update nested arrays:
+
+```ts
+import { flatten, $, $mul } from 'mongo-dot-notation';
+
+const student = {
+  grades: $().merge({
+    questions: $('[]').merge({
+      value: $mul(100),
+    }),
+  }),
+};
+
+flatten(student);
+```
+
+Calling `flatten(student)` results in:
+
+```json
+{
+  "$mul": {
+    "grades.$.questions.$[].value": 100
+  }
+}
+```
+
 See the [end-to-end](tests/mongo.e2e.ts) tests file for more examples.
 
 ## API
@@ -572,6 +638,8 @@ collection.updateOne(criteria, flatten({ grades: $('[element].grade').$inc(10) }
   arrayFilters: [{ 'element.std': { $lt: 7 } }],
 });
 ```
+
+See [update nested arrays](#update-nested-arrays) for examples using `$().merge`.
 
 [MongoDB manual](https://www.mongodb.com/docs/manual/reference/operator/update/positional/)
 

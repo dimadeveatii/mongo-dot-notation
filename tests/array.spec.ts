@@ -13,6 +13,7 @@ describe('Array update operators', () => {
 
     it.each([
       ['$', $()],
+      ['$', $('')],
       ['$.name', $('name')],
       ['$.name.first', $('name.first')],
       ['0', $(0)],
@@ -42,6 +43,7 @@ describe('Array update operators', () => {
       ['$currentDate', $().$currentDate('date'), { $type: 'date' }],
       ['$currentDate', $().$currentDate('timestamp'), { $type: 'timestamp' }],
       ['$currentDate', $().$timestamp(), { $type: 'timestamp' }],
+      ['merge', $().merge({ x: 7 }), { x: 7 }],
     ])('.%s()', (type, operator, value) => {
       it('Should be operator', () => {
         expect(isOperator(operator)).toStrictEqual(true);

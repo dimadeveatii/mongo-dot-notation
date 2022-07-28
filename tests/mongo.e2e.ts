@@ -419,6 +419,84 @@ describe('End-to-end tests', () => {
       );
       expect(user.scores).toStrictEqual([0, 9, 99]);
     });
+
+    describe('Nested arrays', () => {
+      let students: Collection<any>;
+
+      beforeEach(() => {
+        students = db.collection('students');
+      });
+
+      afterEach(() => students.drop());
+
+      it('Update filtered elements', async () => {
+        await students.insertOne({
+          _id: 1,
+          grades: [
+            { type: 'quiz', questions: [10, 8, 5] },
+            { type: 'quiz', questions: [8, 9, 6] },
+            { type: 'hw', questions: [5, 4, 3] },
+            { type: 'exam', questions: [25, 10, 23, 0] },
+          ],
+        });
+
+        const data = {
+          grades: $('[t]').merge({
+            questions: $('[score]').$inc(2),
+          }),
+        };
+
+        await students.updateMany({}, flatten(data), {
+          arrayFilters: [{ 't.type': 'quiz' }, { score: { $gte: 8 } }],
+        });
+
+        const value = await students.findOne({ _id: 1 });
+
+        expect(value).toStrictEqual({
+          _id: 1,
+          grades: [
+            { type: 'quiz', questions: [12, 10, 5] },
+            { type: 'quiz', questions: [10, 11, 6] },
+            { type: 'hw', questions: [5, 4, 3] },
+            { type: 'exam', questions: [25, 10, 23, 0] },
+          ],
+        });
+      });
+
+      it('Update all elements', async () => {
+        await students.insertOne({
+          _id: 1,
+          grades: [
+            { type: 'quiz', questions: [10, 8, 5] },
+            { type: 'quiz', questions: [8, 9, 6] },
+            { type: 'hw', questions: [5, 4, 3] },
+            { type: 'exam', questions: [25, 10, 23, 0] },
+          ],
+        });
+
+        const data = {
+          grades: $('[]').merge({
+            questions: $('[score]').$inc(2),
+          }),
+        };
+
+        await students.updateMany({}, flatten(data), {
+          arrayFilters: [{ score: { $gte: 8 } }],
+        });
+
+        const value = await students.findOne({ _id: 1 });
+
+        expect(value).toStrictEqual({
+          _id: 1,
+          grades: [
+            { type: 'quiz', questions: [12, 10, 5] },
+            { type: 'quiz', questions: [10, 11, 6] },
+            { type: 'hw', questions: [5, 4, 3] },
+            { type: 'exam', questions: [27, 12, 25, 0] },
+          ],
+        });
+      });
+    });
   });
 
   describe('Bitwise operators', function () {

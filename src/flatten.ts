@@ -103,7 +103,40 @@ export const flatten = <T extends Record<string, any>>(value: T, options?: Optio
   return keyValues.reduce((acc, [key, value]) => d(acc, key, value), {});
 };
 
+const mergeInner = <T>(
+  obj: Record<string, any>,
+  field: string,
+  inner: string,
+  value: T
+): Record<string, any> => ({
+  ...obj,
+  [field]: {
+    ...obj[field],
+    [inner]: value,
+  },
+});
+
 const dot = (options: Required<Options>) => {
+  const merge = <T>(
+    instructions: Record<string, any>,
+    operator: string,
+    field: string,
+    value: T
+  ): Record<string, any> => {
+    if (!isOperator(value)) {
+      return mergeInner(instructions, operator, field, value);
+    }
+
+    if (getType(value) === 'merge') {
+      const mergeValue = getValue(value);
+      return isNullOrUndefined(mergeValue)
+        ? instructions
+        : dotMerge(instructions, `${field}.${operator}`, mergeValue);
+    }
+
+    return mergeInner(instructions, getType(value), `${field}.${operator}`, getValue(value));
+  };
+
   const visit = <T>(
     instructions: Record<string, any>,
     field: string,
@@ -133,24 +166,7 @@ const dot = (options: Required<Options>) => {
   return visit;
 };
 
-const merge = <T>(
-  instructions: Record<string, any>,
-  operator: string,
-  field: string,
-  value: T
-): Record<string, any> => {
-  if (isOperator(value)) {
-    return merge(instructions, getType(value), `${field}.${operator}`, getValue(value));
-  }
-
-  return {
-    ...instructions,
-    [operator]: {
-      ...instructions[operator],
-      [field]: value,
-    },
-  };
-};
+const dotMerge = dot({ array: true, skipEmptyObjects: true });
 
 const isAtomic = <T>(value: T) => isPrimitive(value) || isBsonType(value);
 
@@ -161,14 +177,13 @@ const INSTANCEOF_PRIMITIVES = [Date, RegExp, typeof Buffer !== undefined ? Buffe
   .filter(Boolean);
 
 const isPrimitive = <T = any>(value: T) => {
-  if (value === null || typeof value === 'undefined') {
-    return true;
-  }
-
   return (
+    isNullOrUndefined(value) ||
     TYPEOF_PRIMITIVES.some((type) => typeof value === type) ||
     INSTANCEOF_PRIMITIVES.some((type) => value instanceof type)
   );
 };
+
+const isNullOrUndefined = <T>(value: T) => value === null || typeof value === 'undefined';
 
 const isBsonType = (value: any) => '_bsontype' in value;

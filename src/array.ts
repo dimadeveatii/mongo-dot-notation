@@ -16,6 +16,10 @@ const positional = (field?: number | string) => {
     return `$${field}`;
   }
 
+  if (field === '') {
+    return '$';
+  }
+
   return `$.${field}`;
 };
 
@@ -129,6 +133,26 @@ const sort =
 export const $ = (field?: number | string) => {
   const key = positional(field);
   return create(key, undefined, {
+    /**
+     * Merges the array element(s) identified by the current positional operator
+     * with the given object.
+     * @see https://www.mongodb.com/docs/manual/reference/operator/update/positional-all/#nested-arrays
+     * @param value object to merge
+     *
+     * @example
+     * ```ts
+     * flatten({ points: $('[]').merge({ x: 0, y: 1 }) });
+     *
+     * // {
+     * //   $set: {
+     * //     'points.$[].x': 1,
+     * //     'points.$[].y': 2,
+     * //   }
+     * // }
+     * ```
+     */
+    merge: <T extends Record<string, any>>(value: T) => create(key, create('merge', value)),
+
     /**
      * @see {@link $inc}
      */
