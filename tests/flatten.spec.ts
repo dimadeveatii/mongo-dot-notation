@@ -302,6 +302,32 @@ describe('flatten()', () => {
     });
   });
 
+  describe.each([
+    [{ x: $().merge({}) }, {}],
+    [{ x: $().merge(null as any) }, {}],
+    [{ x: $('[]').merge({}) }, {}],
+    [{ x: $().merge({ a: {}, b: 2 }) }, { $set: { 'x.$.b': 2 } }],
+    [{ x: $('[]').merge({ a: {}, b: 2 }) }, { $set: { 'x.$[].b': 2 } }],
+    [{ x: $('w').merge({ a: {}, b: 2 }) }, { $set: { 'x.$.w.b': 2 } }],
+    [{ x: $().merge({ y: 1 }) }, { $set: { 'x.$.y': 1 } }],
+    [{ x: $().merge({ y: $inc(99) }) }, { $inc: { 'x.$.y': 99 } }],
+    [{ x: $('[]').merge({ y: 1 }) }, { $set: { 'x.$[].y': 1 } }],
+    [{ x: $('[filter]').merge({ y: 1 }) }, { $set: { 'x.$[filter].y': 1 } }],
+    [{ x: $().merge({ a: { b: { c: 'd' } } }) }, { $set: { 'x.$.a.b.c': 'd' } }],
+    [
+      { x: $('[]').merge({ y: $('[elem]').merge({ z: 'test' }) }) },
+      { $set: { 'x.$[].y.$[elem].z': 'test' } },
+    ],
+    [
+      { x: $('[].a').merge({ w: 42, y: $('[elem].b').merge({ z: { A: 'X', B: 'Y' } }) }) },
+      { $set: { 'x.$[].a.y.$[elem].b.z.A': 'X', 'x.$[].a.y.$[elem].b.z.B': 'Y', 'x.$[].a.w': 42 } },
+    ],
+  ])('When using nested arrays', (input, expected) => {
+    it('should verify value', () => {
+      expect(flatten(input)).toStrictEqual(expected);
+    });
+  });
+
   describe('GitHub issues', () => {
     describe('issues/7', () => {
       it('Should flatten array inside of object', () => {
@@ -322,6 +348,21 @@ describe('flatten()', () => {
           $set: {
             'ipv4.enable': 'yes',
             'ipv4.rule.0.flow.destinationAddress': '0.0.0.0',
+          },
+        });
+      });
+    });
+
+    describe('issues/10', () => {
+      it('Should merge fields inside of array', () => {
+        const data = {
+          address: $().merge({ nr: 7, code: 'AB1234' }),
+        };
+
+        expect(flatten(data)).toStrictEqual({
+          $set: {
+            'address.$.nr': 7,
+            'address.$.code': 'AB1234',
           },
         });
       });
