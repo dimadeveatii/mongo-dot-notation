@@ -151,7 +151,7 @@ const dot = (options: Required<Options>) => {
       return merge(instructions, getType(value), field, getValue(value));
     }
 
-    const keyValues = Object.entries(value);
+    const keyValues = Object.entries(value as object);
     if (keyValues.length === 0) {
       const ignoreValue = (Array.isArray(value) && options.array) || options.skipEmptyObjects;
       return ignoreValue ? instructions : merge(instructions, '$set', field, value);
