@@ -3,7 +3,7 @@ version: '3.9'
 services:
   mongodb:
     container_name: mongodb
-    image: mongo:5
+    image: mongo:${MONGODB_VERSION:-5}
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: secret
