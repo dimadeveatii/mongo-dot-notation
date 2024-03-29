@@ -2,19 +2,30 @@ version: '3.9'
 
 services:
   mongodb:
-    container_name: mongodb
     image: mongo:${MONGODB_VERSION:-5}
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: secret
       MONGO_INITDB_DATABASE: e2e
+      MONGODB_VERSION: ${MONGODB_VERSION:-5}
+    healthcheck:
+      test: >
+        if [ "$(echo "${MONGODB_VERSION}" | cut -c1)" -ge "6" ]; then
+          echo 'db.runCommand("ping").ok' | mongosh --quiet
+        else
+          echo 'db.stats().ok' | mongo localhost:27017/e2e --quiet
+        fi
+      interval: 1s
+      timeout: 3s
+      retries: 10
+    volumes:
+      - /data/db
   node:
     container_name: node
     build: .
     tty: true
     environment:
       MONGODB_URL: mongodb://root:secret@mongodb:27017/e2e?authSource=admin
-    links:
-      - mongodb:mongodb
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
